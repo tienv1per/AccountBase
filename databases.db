@@ -1,0 +1,14 @@
+create DATABASE Base;
+use Base;
+create table if not exists User(
+	id int primary key auto_increment,
+    firstname varchar(255),
+    lastname varchar(255),
+	username varchar(255),
+	email varchar(255),
+	title varchar(255),
+	image varchar(2048),
+	dob varchar(255),
+	phone varchar(20),
+	address varchar(2048)
+);
