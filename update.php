@@ -27,8 +27,6 @@ $year = $birthParts[2];
 
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-
-
     $response = [
         "success" => "",
         "message" => ""

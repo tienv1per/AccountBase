@@ -220,7 +220,7 @@ $year = $birthParts[2];
             <div class="modal-header-text">Edit personal profile</div>
             <span id="close">&times;</span>
         </div>
-        <form class="form" enctype="multipart/form-data">
+        <form class="form" enctype="multipart/form-data" method="post" action="update.php">
             <div class="modal-form">
                 <div class="form-row">
                     <div class="rows">
@@ -443,29 +443,29 @@ $year = $birthParts[2];
         }
     };
 
-    $(document).ready(function () {
-        $(".form").submit(function (event) {
-            event.preventDefault();
-
-            var formData = $(this).serialize();
-
-            $.ajax({
-                url: "update.php",
-                type: "POST",
-                data: formData,
-                success: function (response) {
-                    response = JSON.parse(response);
-                    // Hành động sau khi nhận phản hồi thành công từ máy chủ
-                    $("#result").html(response.message);
-                    //console.log(response);
-                    if (response["success"]) {
-                        location.reload();
-                    } else {
-                        openPopup();
-                    }
-                }
-            });
-        });
-    });
+    // $(document).ready(function () {
+    //     $(".form").submit(function (event) {
+    //         event.preventDefault();
+    //
+    //         var formData = $(this).serialize();
+    //
+    //         $.ajax({
+    //             url: "update.php",
+    //             type: "POST",
+    //             data: formData,
+    //             success: function (response) {
+    //                 response = JSON.parse(response);
+    //                 // Hành động sau khi nhận phản hồi thành công từ máy chủ
+    //                 $("#result").html(response.message);
+    //                 //console.log(response);
+    //                 if (response["success"]) {
+    //                     location.reload();
+    //                 } else {
+    //                     openPopup();
+    //                 }
+    //             }
+    //         });
+    //     });
+    // });
 </script>
 </html>
