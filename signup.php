@@ -2,49 +2,58 @@
 $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+$salt = "tobiasnguyen";
 
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $errors = [];
+    $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
 
+    if(!$username){
+        $errors[] = 'Username empty. Please enter your username';
+    }
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         $errors[] = "Invalid email ''. Please try again.";
     }
+
     if(!$password){
-        $errors[] = 'Mật khẩu không hợp lệ. Vui lòng thử lại.';
+        $errors[] = 'Password empty. Please enter your password';
     }
 
     if(empty($errors)){
-        $statement = $pdo->prepare("SELECT * FROM user WHERE email = :email");
+        $statement = $pdo->prepare("SELECT * FROM user WHERE username = :username OR email = :email");
+        $statement->bindValue(":username", $username);
         $statement->bindValue(":email", $email);
         $statement->execute();
-        $user = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $existUser = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        if($user) {
-            $passwordUser = $user[0]['password'];
-            if(password_verify($password, $passwordUser)){
-                header("Location: account.php");
-            } else {
-                $errors[] = "Email or password not correct";
-            }
-        }
-        else {
-            $errors[] = "Email or password not correct";
+        if($existUser){
+            $errors[] = "Username or password has already exist.";
+        } else {
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $statementAdd = $pdo->prepare("INSERT INTO user (username, email, password) 
+                                VALUES (:username, :email, :password)");
+            $statementAdd->bindValue(":username", $username);
+            $statementAdd->bindValue(":email", $email);
+            $statementAdd->bindValue(":password", $passwordHash);
+            $statementAdd->execute();
+            header("Location: login.php");
         }
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Base</title>
-    <link rel="stylesheet" href="login.css">
+    <title>Document</title>
+    <link rel="stylesheet" href="signup.css">
     <link rel="stylesheet" href="popup.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
 <div class="container">
@@ -56,16 +65,26 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </a>
             </div>
             <div class="title">
-                <h1>Đăng nhập</h1>
-                <span>Chào mừng trở lại. Đăng nhập để bắt đầu làm việc.</span>
+                <h1>Đăng ký</h1>
+                <span>Chào mừng bạn. Đăng ký để bắt đầu làm việc.</span>
             </div>
             <div class="box">
-                <form method="post" id="loginForm">
+                <form method="post" id="signupForm">
+                    <div class="row">
+                        <div class="label">Username</div>
+                        <div class="input">
+                            <input
+                                type="text"
+                                name="username"
+                                placeholder="Username của bạn"
+                            />
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="label">Email</div>
                         <div class="input">
                             <input
-                                type="text"
+                                type="email"
                                 name="email"
                                 placeholder="Email của bạn"
                             />
@@ -80,29 +99,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 placeholder="Mật khẩu của bạn"
                             />
                         </div>
-
                     </div>
                 </form>
                 <div class="form-relative">
-                    <div class="checkbox">
-                        <input
-                            type="checkbox"
-                            checked
-                            name="saved"
-                        />
-                        &nbsp; Giữ tôi luôn đăng nhập
-                    </div>
-                    <button class="submit" type="submit" form="loginForm">
-                        Đăng nhập để bắt đầu làm việc
+                    <button class="submit" form="signupForm">
+                        Đăng ký
                     </button>
-                    <div class="oauth">
-                        <div class="label">
-                            <span>Hoặc, đăng nhập thông qua SSO</span>
-                        </div>
-                        <a class="oauth-login left24k" href="https://sso.base.vn/google">Đăng nhập bằng Google</a>
-                        <a class="oauth-login right24k" href="https://sso.base.vn/ms">Đăng nhập bằng Microsoft</a>
-                        <a class="oauth-login left24k" href="https://sso.base.vn/apple">Đăng nhập bằng AppleID</a>
-                        <div class="oauth-login right24k">Đăng nhập bằng SAML</div>
+                    <div class="already">Đã có tài khoản?
+                        <span id="login">Đăng nhập</span>
                     </div>
                 </div>
             </div>
@@ -111,6 +115,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="right">
     </div>
 </div>
+
 <!--<div class="popup" id="popup">-->
 <!--    <div class="popup-content">-->
 <!--        <div class="popup-but">-->
@@ -124,8 +129,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!--    </div>-->
 <!--</div>-->
 <!--</body>-->
-<!---->
 <!--<script>-->
+<!--    var redirectLogin = document.getElementById("login");-->
+<!--    redirectLogin.addEventListener("click", () => {-->
+<!--        window.location.href = "login.php";-->
+<!--    });-->
+<!---->
+<!---->
 <!--    var popup = document.getElementById("popup");-->
 <!--    function showModal() {-->
 <!--        popup.style.display = "block";-->
@@ -145,8 +155,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!--    };-->
 <!---->
 <!--    --><?php //if(!empty($errors)) {?>
-<!--//        showModal();-->
+<!--//    showModal();-->
 <!--//    --><?php ////}?>
-<?php  require_once 'popup.php'; ?>
+    <?php require_once 'popup.php'; ?>
+
+    var redirectLogin = document.getElementById("login");
+    redirectLogin.addEventListener("click", () => {
+        window.location.href = "login.php";
+    });
 </script>
 </html>

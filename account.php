@@ -457,7 +457,6 @@ $year = $birthParts[2];
     //                 response = JSON.parse(response);
     //                 // Hành động sau khi nhận phản hồi thành công từ máy chủ
     //                 $("#result").html(response.message);
-    //                 //console.log(response);
     //                 if (response["success"]) {
     //                     location.reload();
     //                 } else {
