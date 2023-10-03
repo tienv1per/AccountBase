@@ -1,11 +1,6 @@
 <?php
 require_once 'functions.php';
 
-//$id = $_GET['id'] ?? null;
-//if (!$id) {
-//    header('Location: account.php');
-//    exit;
-//}
 
 $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
