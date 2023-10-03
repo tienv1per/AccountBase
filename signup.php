@@ -52,8 +52,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="signup.css">
-    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="css/signup.css">
+    <link rel="stylesheet" href="css/popup.css">
 </head>
 <body>
 <div class="container">
@@ -77,6 +77,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                 type="text"
                                 name="username"
                                 placeholder="Username của bạn"
+                                required=""
                             />
                         </div>
                     </div>
@@ -87,6 +88,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                 type="email"
                                 name="email"
                                 placeholder="Email của bạn"
+                                required=""
                             />
                         </div>
                     </div>

@@ -1,27 +1,26 @@
 <?php
+session_start();
 $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$statement = $pdo->prepare('SELECT * FROM user WHERE id = 1');
+$id = $_SESSION['user_id'];
+$statement = $pdo->prepare('SELECT * FROM user WHERE id = :id');
+$statement->bindValue(":id", $id);
 $statement->execute();
 $user = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-$title = $user[0]['title'];
+$title = $user[0]['title']  ?? '';
 $username = $user[0]['username'];
 $email = $user[0]['email'];
-$address = $user[0]['address'];
-$phone = $user[0]['phone'];
+$address = $user[0]['address'] ?? '';
+$phone = $user[0]['phone'] ?? '';
 $image = $user[0]['image'];
-$dob = $user[0]['dob'];
-$firstName = $user[0]['firstname'];
-$lastName = $user[0]['lastname'];
+$dob = $user[0]['dob'] ?? '';
+$firstName = $user[0]['firstname'] ?? '';
+$lastName = $user[0]['lastname'] ?? '';
 $birthParts = explode("/", $dob);
 $day = $birthParts[0];
-$month = $birthParts[1];
-$year = $birthParts[2];
-
-//echo '<pre>';
-//var_dump($_POST);
-//echo '</pre>';
+$month = $birthParts[1] ?? '';
+$year = $birthParts[2] ?? '';
 ?>
 
 <?php include_once 'header.php' ?>
@@ -53,10 +52,10 @@ $year = $birthParts[2];
             <li class="sidebar-btn">Applications</li>
         </ul>
 
-        <div class="sidebar-logout sidebar-btn">
+        <a class="sidebar-logout sidebar-btn" href="login.php">
             <i class="fa-solid fa-power-off"></i>
             Logout
-        </div>
+        </a>
     </div>
     <div class="all">
         <div class="wrapper">

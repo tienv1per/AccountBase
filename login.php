@@ -1,38 +1,46 @@
 <?php
-$pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+session_start();
+if (!isset($_SESSION['user_email'])) {
+    $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $errors = [];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $errors = [];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-        $errors[] = "Invalid email ''. Please try again.";
-    }
-    if(!$password){
-        $errors[] = 'Mật khẩu không hợp lệ. Vui lòng thử lại.';
-    }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Invalid email ''. Please try again.";
+        }
+        if (!$password) {
+            $errors[] = 'Mật khẩu không hợp lệ. Vui lòng thử lại.';
+        }
 
-    if(empty($errors)){
-        $statement = $pdo->prepare("SELECT * FROM user WHERE email = :email");
-        $statement->bindValue(":email", $email);
-        $statement->execute();
-        $user = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($errors)) {
+            $statement = $pdo->prepare("SELECT * FROM user WHERE email = :email");
+            $statement->bindValue(":email", $email);
+            $statement->execute();
+            $user = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        if($user) {
-            $passwordUser = $user[0]['password'];
-            if(password_verify($password, $passwordUser)){
-                header("Location: account.php");
+            if ($user) {
+                $passwordUser = $user[0]['password'];
+                if (password_verify($password, $passwordUser)) {
+                    $_SESSION['user_id'] = $user[0]['id'];
+                    $_SESSION['user_email'] = $user[0]['email'];
+                    header("Location: account.php");
+                } else {
+                    $errors[] = "Email or password not correct";
+                }
             } else {
                 $errors[] = "Email or password not correct";
             }
         }
-        else {
-            $errors[] = "Email or password not correct";
-        }
     }
+}
+else {
+    header("Location: account.php");
+    exit();
 }
 ?>
 
@@ -42,8 +50,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Base</title>
-    <link rel="stylesheet" href="login.css">
-    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/popup.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
