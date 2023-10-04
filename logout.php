@@ -1,10 +1,6 @@
 <?php
 session_start();
-//echo '<pre>';
-//var_dump($_SESSION);
-//echo '</pre>';
-unset($_SESSION['user_email']);
-unset($_SESSION['user_id']);
+session_unset();
 header("Location: login.php");
 ?>
 

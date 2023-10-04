@@ -1,26 +1,36 @@
 <?php
 session_start();
-$pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$id = $_SESSION['user_id'];
-$statement = $pdo->prepare('SELECT * FROM user WHERE id = :id');
-$statement->bindValue(":id", $id);
-$statement->execute();
-$user = $statement->fetchAll(PDO::FETCH_ASSOC);
+if(!isset($_SESSION['user_email'])) {
+    header("Location: login.php");
+}
+else {
+//    echo '<pre>';
+//    print_r($_FILES);
+//    echo '</pre>';
 
-$title = $user[0]['title']  ?? '';
-$username = $user[0]['username'];
-$email = $user[0]['email'];
-$address = $user[0]['address'] ?? '';
-$phone = $user[0]['phone'] ?? '';
-$image = $user[0]['image'];
-$dob = $user[0]['dob'] ?? '';
-$firstName = $user[0]['firstname'] ?? '';
-$lastName = $user[0]['lastname'] ?? '';
-$birthParts = explode("/", $dob);
-$day = $birthParts[0];
-$month = $birthParts[1] ?? '';
-$year = $birthParts[2] ?? '';
+    $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $id = $_SESSION['user_id'];
+    $statement = $pdo->prepare('SELECT * FROM user WHERE id = :id');
+    $statement->bindValue(":id", $id);
+    $statement->execute();
+    $user = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    $title = $user[0]['title']  ?? '';
+    $username = $user[0]['username'];
+    $email = $user[0]['email'];
+    $address = $user[0]['address'] ?? '';
+    $phone = $user[0]['phone'] ?? '';
+    $image = $user[0]['image'] ?? null;
+    $dob = $user[0]['dob'] ?? '';
+    $firstName = $user[0]['firstname'] ?? '';
+    $lastName = $user[0]['lastname'] ?? '';
+    $birthParts = explode("/", $dob);
+    $day = $birthParts[0];
+    $month = $birthParts[1] ?? '';
+    $year = $birthParts[2] ?? '';
+}
+
 ?>
 
 <?php include_once 'header.php' ?>
@@ -52,7 +62,7 @@ $year = $birthParts[2] ?? '';
             <li class="sidebar-btn">Applications</li>
         </ul>
 
-        <a class="sidebar-logout sidebar-btn" href="login.php">
+        <a class="sidebar-logout sidebar-btn" href="logout.php">
             <i class="fa-solid fa-power-off"></i>
             Logout
         </a>
@@ -219,7 +229,7 @@ $year = $birthParts[2] ?? '';
             <div class="modal-header-text">Edit personal profile</div>
             <span id="close">&times;</span>
         </div>
-        <form class="form" enctype="multipart/form-data" method="post" action="update.php">
+        <form class="form" enctype="multipart/form-data">
             <div class="modal-form">
                 <div class="form-row">
                     <div class="rows">
@@ -291,7 +301,7 @@ $year = $birthParts[2] ?? '';
                             <div class="sublabel">Profile image</div>
                         </div>
                         <div class="input-data">
-                            <input type="file" name="image" class="input-file"/>
+                            <input type="file" name="image" class="input-file" value="<?php echo $image?>"/>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -442,28 +452,32 @@ $year = $birthParts[2] ?? '';
         }
     };
 
-    // $(document).ready(function () {
-    //     $(".form").submit(function (event) {
-    //         event.preventDefault();
-    //
-    //         var formData = $(this).serialize();
-    //
-    //         $.ajax({
-    //             url: "update.php",
-    //             type: "POST",
-    //             data: formData,
-    //             success: function (response) {
-    //                 response = JSON.parse(response);
-    //                 // Hành động sau khi nhận phản hồi thành công từ máy chủ
-    //                 $("#result").html(response.message);
-    //                 if (response["success"]) {
-    //                     location.reload();
-    //                 } else {
-    //                     openPopup();
-    //                 }
-    //             }
-    //         });
-    //     });
-    // });
+    $(document).ready(function () {
+        $(".form").submit(function (event) {
+            event.preventDefault();
+
+            //var formData = $(this).serialize();
+            var formData = new FormData(this);
+            //console.log(formData);
+
+            $.ajax({
+                url: "update.php",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    response = JSON.parse(response);
+                    // Hành động sau khi nhận phản hồi thành công từ máy chủ
+                    $("#result").html(response.message);
+                    if (response["success"]) {
+                        location.reload();
+                    } else {
+                        openPopup();
+                    }
+                }
+            });
+        });
+    });
 </script>
 </html>

@@ -4,7 +4,6 @@ if (!isset($_SESSION['user_email'])) {
     $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors = [];
         $email = $_POST['email'];
@@ -28,6 +27,7 @@ if (!isset($_SESSION['user_email'])) {
                 if (password_verify($password, $passwordUser)) {
                     $_SESSION['user_id'] = $user[0]['id'];
                     $_SESSION['user_email'] = $user[0]['email'];
+
                     header("Location: account.php");
                 } else {
                     $errors[] = "Email or password not correct";
