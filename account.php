@@ -397,20 +397,48 @@ else {
         </form>
     </div>
 </div>
-<div class="popup" id="popup">
-    <div class="popup-but">
-        <div class="popup-test">
-            <i class="fa-solid fa-circle-question"></i>
-            <span id="result">LAST_NAME_EMPTY</span>
+<div class="popup-pro" id="popup-pro">
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <div class="popup-but">
+                <div class="popup-test">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <span id="result"></span>
+                </div>
+                <span id="closeErr">&times;</span>
+            </div>
+            <button type="button" id="btnOk">OK</button>
         </div>
-        <span id="closeErr">&times;</span>
     </div>
-    <button type="button" id="btnOk">OK</button>
 </div>
 </body>
 <script>
+    var popup = document.getElementById("popup-pro");
+
+    function openPopup() {
+        popup.style.display = "block";
+    }
+
+    var btnCloseErr = document.getElementById("closeErr");
+    btnCloseErr.onclick = function () {
+        popup.style.display = "none";
+    }
+    var btnOk = document.getElementById("btnOk");
+    btnOk.onclick = function () {
+        popup.style.display = "none";
+
+    }
+
+    popup.onclick = function (event) {
+        if (event.target == popup && event.target !== btnCloseErr) {
+        }
+    };
+
+    <?php if(!empty($errors)) {?>
+    showModal();
+    <?php }?>
+
     var modal = document.getElementById("modal");
-    //var modalContent = document.getElementById("modal-content");
     var btn = document.getElementById("myBtn");
     btn.onclick = function () {
         modal.style.display = "block";
@@ -428,41 +456,13 @@ else {
 
     modal.onclick = function (event) {
         if (event.target == modal && event.target !== cancelButton) {
-            // Không làm gì cả, modal vẫn hiển thị
-        }
-    };
-
-    var popup = document.getElementById("popup");
-
-    function openPopup() {
-        popup.style.display = "block";
-        popup.style.backgroundColor = "#fff";
-
-    }
-
-    var btnCloseErr = document.getElementById("closeErr");
-    btnCloseErr.onclick = function () {
-        popup.style.display = "none";
-    }
-    var btnOk = document.getElementById("btnOk");
-    btnOk.onclick = function () {
-        popup.style.display = "none";
-
-    }
-
-    popup.onclick = function (event) {
-        if (event.target == popup && event.target !== btnCloseErr) {
-            // Không làm gì cả, modal vẫn hiển thị
         }
     };
 
     $(document).ready(function () {
         $(".form").submit(function (event) {
             event.preventDefault();
-
-            //var formData = $(this).serialize();
             var formData = new FormData(this);
-            //console.log(formData);
 
             $.ajax({
                 url: "update.php",
@@ -472,11 +472,14 @@ else {
                 contentType: false,
                 success: function (response) {
                     response = JSON.parse(response);
-                    // Hành động sau khi nhận phản hồi thành công từ máy chủ
+
                     $("#result").html(response.message);
+                    console.log(response);
                     if (response["success"]) {
                         location.reload();
                     } else {
+                        var spanResult = document.getElementById("result");
+                        spanResult.textContent = response["message"];
                         openPopup();
                     }
                 }
