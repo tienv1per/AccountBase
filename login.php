@@ -27,7 +27,7 @@ if (!isset($_SESSION['user_email'])) {
                 if (password_verify($password, $passwordUser)) {
                     $_SESSION['user_id'] = $user[0]['id'];
                     $_SESSION['user_email'] = $user[0]['email'];
-
+                    setcookie(session_name(), $_COOKIE[session_name()], time() + 24*60*60*7);
                     header("Location: account.php");
                 } else {
                     $errors[] = "Email or password not correct";
