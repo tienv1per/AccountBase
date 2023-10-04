@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'functions.php';
 if (!isset($_SESSION['user_email'])) {
     $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -8,6 +9,20 @@ if (!isset($_SESSION['user_email'])) {
         $errors = [];
         $email = $_POST['email'];
         $password = $_POST['password'];
+
+        if(isset($_POST['submit'])){
+            $secret = getEnvVar('SECRET_CAPTCHA_SERVER');
+            $response = $_POST['g-recaptcha-response'];
+            $remoteip = $_SERVER['REMOTE_ADDR'];
+            $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response&remoteip=$remoteip";
+            $data = file_get_contents($url);
+            $row = json_decode($data, true);
+//            if ($row['success'] == "true") {
+//                echo "<script>alert('Wow you are not a robot 😲');</script>";
+//            } else {
+//                echo "<script>alert('Oops you are a robot 😡');</script>";
+//            }
+        }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "Invalid email ''. Please try again.";
@@ -53,6 +68,7 @@ else {
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/popup.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 <div class="container">
@@ -90,6 +106,7 @@ else {
                         </div>
 
                     </div>
+                    <div class="g-recaptcha" data-sitekey="6Ld0oXUoAAAAADMHAjYB_d5o5Ly9GqDhTMtKWnJs"></div>
                 </form>
                 <div class="form-relative">
                     <div class="checkbox">
@@ -100,9 +117,13 @@ else {
                         />
                         &nbsp; Giữ tôi luôn đăng nhập
                     </div>
-                    <button class="submit" type="submit" form="loginForm">
+<!--                    <form method="post" id="captchaForm">-->
+<!---->
+<!--                    </form>-->
+                    <button class="submit" type="submit" form="loginForm" name="submit">
                         Đăng nhập để bắt đầu làm việc
                     </button>
+
                     <div class="oauth">
                         <div class="label">
                             <span>Hoặc, đăng nhập thông qua SSO</span>

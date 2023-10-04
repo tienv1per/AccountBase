@@ -1,13 +1,10 @@
 <?php
 session_start();
+
 if(!isset($_SESSION['user_email'])) {
     header("Location: login.php");
 }
 else {
-//    echo '<pre>';
-//    print_r($_FILES);
-//    echo '</pre>';
-
     $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $id = $_SESSION['user_id'];
@@ -435,7 +432,7 @@ else {
     };
 
     <?php if(!empty($errors)) {?>
-    showModal();
+        showModal();
     <?php }?>
 
     var modal = document.getElementById("modal");

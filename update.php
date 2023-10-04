@@ -1,25 +1,31 @@
 <?php
+session_start();
 require_once 'functions.php';
-
 
 $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$statement = $pdo->prepare('SELECT * FROM user WHERE id = 1');
+$id = $_SESSION['user_id'];
+$statement = $pdo->prepare('SELECT * FROM user WHERE id = :id');
+$statement->bindValue(":id", $id);
 $statement->execute();
 $user = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-$title = $user[0]['title'];
-$address = $user[0]['address'];
-$phone = $user[0]['phone'];
-$dob = $user[0]['dob'];
-$imagePath = $user[0]['image'] ?? '';
-$firstName = $user[0]['firstname'];
-$lastName = $user[0]['lastname'];
-$birthParts = explode("/", $dob);
-$day = $birthParts[0];
-$month = $birthParts[1];
-$year = $birthParts[2];
 
+$title = $user[0]['title'] ?? null;
+$address = $user[0]['address'] ?? null;
+$phone = $user[0]['phone'] ?? null;
+$dob = $user[0]['dob'] ?? null;
+$imagePath = $user[0]['image'] ?? null;
+$firstName = $user[0]['firstname'] ?? null;
+$lastName = $user[0]['lastname'] ?? null;
+
+if($user[0]['dob']){
+    $dob = $user[0]['dob'];
+    $birthParts = explode("/", $dob);
+    $day = $birthParts[0];
+    $month = $birthParts[1];
+    $year = $birthParts[2];
+}
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $response = [
@@ -49,7 +55,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $dob = $day."/".$month."/".$year;
 
-
     if(empty($errors)){
         if(!is_dir('images')) {
             mkdir('images');
@@ -61,8 +66,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         } else {
             $imagePath = $user[0]['image'];
         }
+        if($imagePath) {
+            move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
+        }
 
-        move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
 
         $response["success"] = 1;
         $statement = $pdo->prepare("UPDATE user SET title = :title,
@@ -74,7 +81,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                             address = :address
                                             WHERE id = :id");
 
-        $statement->bindValue(":id", 1);
+        $statement->bindValue(":id", $id);
         $statement->bindValue(":title", $title);
         $statement->bindValue(":firstname", $firstName);
         $statement->bindValue(":lastname", $lastName);
