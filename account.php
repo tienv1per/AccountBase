@@ -21,7 +21,11 @@ else {
     $email = $user[0]['email'];
     $address = $user[0]['address'] ?? '';
     $phone = $user[0]['phone'] ?? '';
-    $image = $user[0]['image'] ?? null;
+    if($user[0]['image'] === '' or !$user[0]['image']){
+        $image = null;
+    } else {
+        $image = $user[0]['image'];
+    }
     $dob = $user[0]['dob'] ?? '';
     $firstName = $user[0]['firstname'] ?? '';
     $lastName = $user[0]['lastname'] ?? '';
