@@ -1,62 +1,63 @@
 <?php
-session_start();
-require_once 'functions.php';
-if (!isset($_SESSION['user_email'])) {
-    $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $errors = [];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-
-        if(isset($_POST['submit'])){
-            $secret = getEnvVar('SECRET_CAPTCHA_SERVER');
-            $response = $_POST['g-recaptcha-response'];
-            $remoteip = $_SERVER['REMOTE_ADDR'];
-            $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response&remoteip=$remoteip";
-            $data = file_get_contents($url);
-            $row = json_decode($data, true);
-//            if ($row['success'] == "true") {
-//                echo "<script>alert('Wow you are not a robot 😲');</script>";
+//session_start();
+//require_once 'functions.php';
+//if (!isset($_SESSION['user_email'])) {
+//    $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
+//    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//
+//    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//        $errors = [];
+//        $email = $_POST['email'];
+//        $password = $_POST['password'];
+//
+//        if(isset($_POST['submit'])){
+//            $secret = getEnvVar('SECRET_CAPTCHA_SERVER');
+//            $response = $_POST['g-recaptcha-response'];
+//            $remoteip = $_SERVER['REMOTE_ADDR'];
+//            $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response&remoteip=$remoteip";
+//            $data = file_get_contents($url);
+//            $row = json_decode($data, true);
+////            if ($row['success'] == "true") {
+////                echo "<script>alert('Wow you are not a robot 😲');</script>";
+////            } else {
+////                echo "<script>alert('Oops you are a robot 😡');</script>";
+////            }
+//        }
+//
+//        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+//            $errors[] = "Invalid email ''. Please try again.";
+//        }
+//        if (!$password) {
+//            $errors[] = 'Mật khẩu không hợp lệ. Vui lòng thử lại.';
+//        }
+//
+//        if (empty($errors)) {
+//            $statement = $pdo->prepare("SELECT * FROM user WHERE email = :email");
+//            $statement->bindValue(":email", $email);
+//            $statement->execute();
+//            $user = $statement->fetchAll(PDO::FETCH_ASSOC);
+//
+//            if ($user) {
+//                $passwordUser = $user[0]['password'];
+//                if (password_verify($password, $passwordUser)) {
+//                    $_SESSION['user_id'] = $user[0]['id'];
+//                    $_SESSION['user_email'] = $user[0]['email'];
+//                    setcookie(session_name(), $_COOKIE[session_name()], time() + 24*60*60*7);
+//                    header("Location: account.php");
+//                } else {
+//                    $errors[] = "Email or password not correct";
+//                }
 //            } else {
-//                echo "<script>alert('Oops you are a robot 😡');</script>";
+//                $errors[] = "Email or password not correct";
 //            }
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = "Invalid email ''. Please try again.";
-        }
-        if (!$password) {
-            $errors[] = 'Mật khẩu không hợp lệ. Vui lòng thử lại.';
-        }
-
-        if (empty($errors)) {
-            $statement = $pdo->prepare("SELECT * FROM user WHERE email = :email");
-            $statement->bindValue(":email", $email);
-            $statement->execute();
-            $user = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            if ($user) {
-                $passwordUser = $user[0]['password'];
-                if (password_verify($password, $passwordUser)) {
-                    $_SESSION['user_id'] = $user[0]['id'];
-                    $_SESSION['user_email'] = $user[0]['email'];
-                    setcookie(session_name(), $_COOKIE[session_name()], time() + 24*60*60*7);
-                    header("Location: account.php");
-                } else {
-                    $errors[] = "Email or password not correct";
-                }
-            } else {
-                $errors[] = "Email or password not correct";
-            }
-        }
-    }
-}
-else {
-    header("Location: account.php");
-    exit();
-}
+//        }
+//    }
+//}
+//else {
+//    header("Location: /account");
+////    echo "12345";
+////    exit();
+//}
 ?>
 
 <!DOCTYPE html>
@@ -65,8 +66,8 @@ else {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Base</title>
-    <link rel="stylesheet" href="../public/css/login.css">
-    <link rel="stylesheet" href="../public/css/popup.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/popup.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
@@ -89,9 +90,9 @@ else {
                         <div class="label">Email</div>
                         <div class="input">
                             <input
-                                type="text"
-                                name="email"
-                                placeholder="Email của bạn"
+                                    type="text"
+                                    name="email"
+                                    placeholder="Email của bạn"
                             />
                         </div>
                     </div>
@@ -99,9 +100,9 @@ else {
                         <div class="label">Mật khẩu</div>
                         <div class="input">
                             <input
-                                type="password"
-                                name="password"
-                                placeholder="Mật khẩu của bạn"
+                                    type="password"
+                                    name="password"
+                                    placeholder="Mật khẩu của bạn"
                             />
                         </div>
 
@@ -111,9 +112,9 @@ else {
                 <div class="form-relative">
                     <div class="checkbox">
                         <input
-                            type="checkbox"
-                            checked
-                            name="saved"
+                                type="checkbox"
+                                checked
+                                name="saved"
                         />
                         &nbsp; Giữ tôi luôn đăng nhập
                     </div>

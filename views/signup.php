@@ -1,48 +1,48 @@
 <?php
-$pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-$salt = "tobiasnguyen";
-
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $errors = [];
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    if(!$username){
-        $errors[] = 'Username empty. Please enter your username';
-    }
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-        $errors[] = "Invalid email ''. Please try again.";
-    }
-
-    if(!$password){
-        $errors[] = 'Password empty. Please enter your password';
-    }
-
-    if(empty($errors)){
-        $statement = $pdo->prepare("SELECT * FROM user WHERE username = :username OR email = :email");
-        $statement->bindValue(":username", $username);
-        $statement->bindValue(":email", $email);
-        $statement->execute();
-        $existUser = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        if($existUser){
-            $errors[] = "Username or password has already exist.";
-        } else {
-            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-            $statementAdd = $pdo->prepare("INSERT INTO user (username, email, password) 
-                                VALUES (:username, :email, :password)");
-            $statementAdd->bindValue(":username", $username);
-            $statementAdd->bindValue(":email", $email);
-            $statementAdd->bindValue(":password", $passwordHash);
-            $statementAdd->execute();
-            header("Location: login.php");
-        }
-    }
-}
-?>
+//$pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
+//$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//
+//$salt = "tobiasnguyen";
+//
+//if($_SERVER['REQUEST_METHOD'] === 'POST'){
+//    $errors = [];
+//    $username = $_POST['username'];
+//    $email = $_POST['email'];
+//    $password = $_POST['password'];
+//
+//    if(!$username){
+//        $errors[] = 'Username empty. Please enter your username';
+//    }
+//    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+//        $errors[] = "Invalid email ''. Please try again.";
+//    }
+//
+//    if(!$password){
+//        $errors[] = 'Password empty. Please enter your password';
+//    }
+//
+//    if(empty($errors)){
+//        $statement = $pdo->prepare("SELECT * FROM user WHERE username = :username OR email = :email");
+//        $statement->bindValue(":username", $username);
+//        $statement->bindValue(":email", $email);
+//        $statement->execute();
+//        $existUser = $statement->fetchAll(PDO::FETCH_ASSOC);
+//
+//        if($existUser){
+//            $errors[] = "Username or password has already exist.";
+//        } else {
+//            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+//            $statementAdd = $pdo->prepare("INSERT INTO user (username, email, password)
+//                                VALUES (:username, :email, :password)");
+//            $statementAdd->bindValue(":username", $username);
+//            $statementAdd->bindValue(":email", $email);
+//            $statementAdd->bindValue(":password", $passwordHash);
+//            $statementAdd->execute();
+//            header("Location: login.php");
+//        }
+//    }
+//}
+//?>
 
 
 
@@ -51,7 +51,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Signup Base</title>
     <link rel="stylesheet" href="../css/signup.css">
     <link rel="stylesheet" href="../css/popup.css">
 </head>
@@ -121,7 +121,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
 var redirectLogin = document.getElementById("login");
 redirectLogin.addEventListener("click", () => {
-window.location.href = "login.php";
+window.location.href = "login";
 });
 </script>
 </html>

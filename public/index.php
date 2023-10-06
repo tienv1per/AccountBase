@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 use app\core\Application;
+use app\controllers\UserController;
 
 $app = new Application(dirname(__DIR__));
 
@@ -8,8 +9,15 @@ $app->router->get('/', '/home');
 
 $app->router->get('/contact', 'contact');
 
-$app->router->get('/login', function (){
-    return "Login Page";
-});
+$app->router->get('/login', 'login');
+$app->router->post('/login', [new UserController(), 'login']);
+
+$app->router->post('/logout', [new UserController(), 'logout']);
+
+$app->router->get('/signup', [new UserController(), 'signup']);
+//$app->router->get('/signup', 'signup');
+$app->router->post('/signup', [new UserController(), 'signup']);
+
+$app->router->get('/account', 'account');
 
 $app->run();

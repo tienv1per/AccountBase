@@ -20,6 +20,11 @@ class Router
         $this->routes['get'][$path] = $callback;
     }
 
+    public function post($path, $callback)
+    {
+        $this->routes['post'][$path] = $callback;
+    }
+
     public function renderView($view)
     {
         ob_start();
@@ -33,6 +38,7 @@ class Router
         $method = $this->request->getMethod();
 
         $callback = $this->routes[$method][$path] ?? false;
+        //echo $callback.'<br>';
         if($callback === false){
             echo "Not found";
             exit;
@@ -40,8 +46,11 @@ class Router
 
         // this is view file
         if(is_string($callback)){
+//            echo '<pre>';
+//            var_dump($callback);
+//            echo '</pre>';
             return $this->renderView($callback);
         }
-        echo call_user_func($callback);
+        echo call_user_func($callback, $this);
     }
 }
