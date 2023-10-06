@@ -18,6 +18,9 @@ $app->router->get('/signup', [new UserController(), 'signup']);
 //$app->router->get('/signup', 'signup');
 $app->router->post('/signup', [new UserController(), 'signup']);
 
-$app->router->get('/account', 'account');
+$app->router->get('/account', [new UserController(), 'account']);
+$app->router->post('/account', [new UserController(), 'account']);
+
+$app->router->post('/update', [new UserController(), 'update']);
 
 $app->run();

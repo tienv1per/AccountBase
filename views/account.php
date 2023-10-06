@@ -1,39 +1,10 @@
 <?php
-session_start();
-
-//if(!isset($_SESSION['user_email'])) {
-//    header("Location: login.php");
-//}
-//else {
-$pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//$id = $_SESSION['user_id'];
-$statement = $pdo->prepare('SELECT * FROM user WHERE id = 1');
-//$statement->bindValue(":id", $id);
-$statement->execute();
-$user = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-$title = $user[0]['title']  ?? '';
-$username = $user[0]['username'];
-$email = $user[0]['email'];
-$address = $user[0]['address'] ?? '';
-$phone = $user[0]['phone'] ?? '';
-if($user[0]['image'] === '' or !$user[0]['image']){
-    $image = null;
-} else {
-    $image = $user[0]['image'];
-}
-$dob = $user[0]['dob'] ?? '';
-$firstName = $user[0]['firstname'] ?? '';
-$lastName = $user[0]['lastname'] ?? '';
+$dob = $user['dob'] ?? '';
 $birthParts = explode("/", $dob);
 $day = $birthParts[0];
 $month = $birthParts[1] ?? '';
 $year = $birthParts[2] ?? '';
-//}
-
 ?>
-
 <?php include_once 'header.php' ?>
 <body>
 <div class="container">
@@ -63,7 +34,7 @@ $year = $birthParts[2] ?? '';
             <li class="sidebar-btn">Applications</li>
         </ul>
 
-        <a class="sidebar-logout sidebar-btn" href="logout.php">
+        <a class="sidebar-logout sidebar-btn" href="/logout">
             <i class="fa-solid fa-power-off"></i>
             Logout
         </a>
@@ -79,8 +50,8 @@ $year = $birthParts[2] ?? '';
 
                         <div class="account">
                             <span class="account-acc">ACCOUNT</span>
-                            <div class="account-username"><?php echo $lastName . " " . $firstName ?>
-                                · <?php echo $title ?></div>
+                            <div class="account-username"><?php echo $user['lastname'] . " " . $user['firstname'] ?>
+                                · <?php echo $user['title'] ?></div>
                         </div>
                     </div>
                     <div class="header-right">
@@ -96,22 +67,22 @@ $year = $birthParts[2] ?? '';
                     <div class="profile">
                         <div class="profile-info">
                             <div class="avatar">
-                                <?php if (!empty($image)) : ?>
-                                    <img src="<?php echo $image; ?>" style="height: 120px; width: 120px" />
+                                <?php if (!empty($user['image'])) : ?>
+                                    <img src="<?php echo $user['image']; ?>" style="height: 120px; width: 120px" />
                                 <?php else : ?>
                                     <i class="fa-regular fa-user"></i>
                                 <?php endif; ?>
                             </div>
                             <div class="info">
-                                <div class="info-name"><?php echo $lastName . " " . $firstName ?></div>
-                                <div class="info-title"><?php echo $title ?></div>
+                                <div class="info-name"><?php echo $user['lastname'] . " " . $user['firstname'] ?></div>
+                                <div class="info-title"><?php echo $user['title'] ?></div>
                                 <div class="info-email">
                                     <div class="info-add-phone">Email address</div>
-                                    <div class="detail-add"><?php echo $email ?></div>
+                                    <div class="detail-add"><?php echo $user['email'] ?></div>
                                 </div>
                                 <div class="info-email">
                                     <div class="info-add-phone">Phone number</div>
-                                    <div class="detail-add"><?php echo $phone ?></div>
+                                    <div class="detail-add"><?php echo $user['phone'] ?></div>
                                 </div>
                             </div>
                         </div>
@@ -120,7 +91,7 @@ $year = $birthParts[2] ?? '';
                         <div class="title">Contact info</div>
                         <div class="contact-info">
                             <b>Address</b>
-                            <span><?php echo $address ?></span>
+                            <span><?php echo $user['address'] ?></span>
                         </div>
                     </div>
                     <div class="contact">
@@ -154,8 +125,8 @@ $year = $birthParts[2] ?? '';
             </div>
             <div class="rightbar">
                 <div class="rightbar-info">
-                    <div class="rightbar-info-name"><?php echo $lastName . " " . $firstName ?></div>
-                    <div class="rightbar-info-email">@<?php echo $username ?></div>
+                    <div class="rightbar-info-name"><?php echo $user['lastname'] . " " . $user['firstname'] ?></div>
+                    <div class="rightbar-info-email">@<?php echo $user['username'] ?></div>
                 </div>
                 <div class="rightbar-account-info">
                     <div class="account-info">ACCOUNT INFORMATION</div>
@@ -243,7 +214,7 @@ $year = $birthParts[2] ?? '';
                                     type="text"
                                     placeholder="your first name"
                                     name="first-name"
-                                    value="<?php echo $firstName ?>"
+                                    value="<?php echo $user['firstname'] ?>"
                             />
                         </div>
                         <div class="clear"></div>
@@ -258,7 +229,7 @@ $year = $birthParts[2] ?? '';
                                     type="text"
                                     placeholder="your last name"
                                     name="last-name"
-                                    value="<?php echo $lastName ?>"
+                                    value="<?php echo $user['lastname'] ?>"
                             />
                         </div>
                     </div>
@@ -268,7 +239,7 @@ $year = $birthParts[2] ?? '';
                             <div class="sublabel">Your email address</div>
                         </div>
                         <div class="input-data">
-                            <div class="input-text"><?php echo $email ?></div>
+                            <div class="input-text"><?php echo $user['email'] ?></div>
                         </div>
                     </div>
                     <div class="rows">
@@ -277,7 +248,7 @@ $year = $birthParts[2] ?? '';
                             <div class="sublabel">Your username</div>
                         </div>
                         <div class="input-data">
-                            <div class="input-text">@<b><?php echo $username ?></b></div>
+                            <div class="input-text">@<b><?php echo $user['username'] ?></b></div>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -291,7 +262,7 @@ $year = $birthParts[2] ?? '';
                                     type="text"
                                     placeholder="Job title"
                                     name="title"
-                                    value="<?php echo $title ?>"
+                                    value="<?php echo $user['title'] ?>"
                             />
                         </div>
                         <div class="clear"></div>
@@ -363,7 +334,7 @@ $year = $birthParts[2] ?? '';
                                     type="text"
                                     placeholder="Your phone number"
                                     name="phone"
-                                    value="<?php echo $phone ?>"
+                                    value="<?php echo $user['phone'] ?>"
                             />
                         </div>
                         <div class="clear"></div>
@@ -378,7 +349,7 @@ $year = $birthParts[2] ?? '';
                                             type="text"
                                             placeholder="Current address"
                                             name="address"
-                                    ><?php echo $address ?></textarea
+                                    ><?php echo $user['address'] ?></textarea
                                     >
                         </div>
                         <div class="clear"></div>
@@ -462,7 +433,7 @@ $year = $birthParts[2] ?? '';
             var formData = new FormData(this);
 
             $.ajax({
-                url: "update.php",
+                url: "/update",
                 type: "POST",
                 data: formData,
                 processData: false,

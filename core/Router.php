@@ -25,8 +25,12 @@ class Router
         $this->routes['post'][$path] = $callback;
     }
 
-    public function renderView($view)
+    public function renderView($view, $user=[])
     {
+//        echo '<pre>';
+//        var_dump($user);
+//        echo '</pre>';
+//        exit;
         ob_start();
         include_once __DIR__."/../views/$view.php";
         return ob_get_clean();
