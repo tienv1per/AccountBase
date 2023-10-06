@@ -91,7 +91,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $statement->bindValue(":address", $address);
 
         $statement->execute();
-        //header("Location: account.php");
     }
     echo json_encode($response);
 }

@@ -1,10 +1,11 @@
 <?php
 
 namespace app\controllers;
+use app\core\Database;
 use app\core\Router;
 use PDO;
 
-require_once '../views/functions.php';
+require_once '../utils/functions.php';
 
 class UserController
 {
@@ -80,16 +81,13 @@ class UserController
                 }
 ;
                 if (empty($errors)) {
-                    $statement = $pdo->prepare("SELECT * FROM user WHERE email = :email");
-                    $statement->bindValue(":email", $email);
-                    $statement->execute();
-                    $user = $statement->fetchAll(PDO::FETCH_ASSOC);
+                    $user = $router->database->getAccountByEmail($email);
 
                     if ($user) {
-                        $passwordUser = $user[0]['password'];
+                        $passwordUser = $user['password'];
                         if (password_verify($password, $passwordUser)) {
-                            $_SESSION['user_id'] = $user[0]['id'];
-                            $_SESSION['user_email'] = $user[0]['email'];
+                            $_SESSION['user_id'] = $user['id'];
+                            $_SESSION['user_email'] = $user['email'];
                             setcookie(session_name(), $_COOKIE[session_name()], time() + 24 * 60 * 60 * 7);
                             header("Location: /account");
                         } else {
@@ -106,7 +104,7 @@ class UserController
         return $router->renderView('login', $errors);
     }
 
-    public function update()
+    public function update(Router $router)
     {
         session_start();
 
@@ -199,7 +197,6 @@ class UserController
                 $statement->bindValue(":address", $address);
 
                 $statement->execute();
-                //header("Location: account.php");
             }
             echo json_encode($response);
         }
@@ -213,19 +210,14 @@ class UserController
             header("Location: login.php");
         }
         else {
-            $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $id = $_SESSION['user_id'];
-            $statement = $pdo->prepare('SELECT * FROM user WHERE id = :id');
-            $statement->bindValue(":id", $id);
-            $statement->execute();
-            $user = $statement->fetch(PDO::FETCH_ASSOC);
+            $user = $router->database->getAccount($id);
         }
 
         return $router->renderView('account', $user);
     }
 
-    public function logout()
+    public function logout(): void
     {
         session_start();
         session_unset();

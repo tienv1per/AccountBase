@@ -2,6 +2,7 @@
 
 namespace app\core;
 
+use app\models\User;
 use PDO;
 
 class Database
@@ -19,6 +20,29 @@ class Database
         $statement->bindValue(":id", $id);
         $statement->execute();
 
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateAccount(User $user)
+    {
+        
+    }
+
+    public function getAccountByEmail(string $email)
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM user WHERE email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function createAccount(User $user, string $passwordHash)
+    {
+        $statement = $this->pdo->prepare("INSERT INTO user (username, email, password)
+                                VALUES (:username, :email, :password)");
+        $statement->bindValue(":username", $user->username);
+        $statement->bindValue(":email", $user->email);
+        $statement->bindValue(":password", $passwordHash);
+        $statement->execute();
     }
 }

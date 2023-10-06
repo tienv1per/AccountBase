@@ -9,28 +9,26 @@ class Router
         'post' => []
     ];
     public Request $request;
+    public Database $database;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, Database $database)
     {
         $this->request = $request;
+        $this->database = $database;
     }
 
-    public function get($path, $callback)
+    public function get($path, $callback): void
     {
         $this->routes['get'][$path] = $callback;
     }
 
-    public function post($path, $callback)
+    public function post($path, $callback): void
     {
         $this->routes['post'][$path] = $callback;
     }
 
     public function renderView($view, $params=[])
     {
-//        echo '<pre>';
-//        var_dump($user);
-//        echo '</pre>';
-//        exit;
         ob_start();
         include_once __DIR__."/../views/$view.php";
         return ob_get_clean();
@@ -42,7 +40,6 @@ class Router
         $method = $this->request->getMethod();
 
         $callback = $this->routes[$method][$path] ?? false;
-        //echo $callback.'<br>';
         if($callback === false){
             echo "Not found";
             exit;
@@ -50,11 +47,8 @@ class Router
 
         // this is view file
         if(is_string($callback)){
-//            echo '<pre>';
-//            var_dump($callback);
-//            echo '</pre>';
             return $this->renderView($callback);
         }
-        echo call_user_func($callback, $this);
+        return call_user_func($callback, $this);
     }
 }
