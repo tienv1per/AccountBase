@@ -1,5 +1,5 @@
 <?php
-$dob = $user['dob'] ?? '';
+$dob = $params['dob'] ?? '';
 $birthParts = explode("/", $dob);
 $day = $birthParts[0];
 $month = $birthParts[1] ?? '';
@@ -50,8 +50,8 @@ $year = $birthParts[2] ?? '';
 
                         <div class="account">
                             <span class="account-acc">ACCOUNT</span>
-                            <div class="account-username"><?php echo $user['lastname'] . " " . $user['firstname'] ?>
-                                · <?php echo $user['title'] ?></div>
+                            <div class="account-username"><?php echo $params['lastname'] . " " . $params['firstname'] ?>
+                                · <?php echo $params['title'] ?></div>
                         </div>
                     </div>
                     <div class="header-right">
@@ -67,22 +67,22 @@ $year = $birthParts[2] ?? '';
                     <div class="profile">
                         <div class="profile-info">
                             <div class="avatar">
-                                <?php if (!empty($user['image'])) : ?>
-                                    <img src="<?php echo $user['image']; ?>" style="height: 120px; width: 120px" />
+                                <?php if (!empty($params['image'])) : ?>
+                                    <img src="<?php echo $params['image']; ?>" style="height: 120px; width: 120px" />
                                 <?php else : ?>
                                     <i class="fa-regular fa-user"></i>
                                 <?php endif; ?>
                             </div>
                             <div class="info">
-                                <div class="info-name"><?php echo $user['lastname'] . " " . $user['firstname'] ?></div>
-                                <div class="info-title"><?php echo $user['title'] ?></div>
+                                <div class="info-name"><?php echo $params['lastname'] . " " . $params['firstname'] ?></div>
+                                <div class="info-title"><?php echo $params['title'] ?></div>
                                 <div class="info-email">
                                     <div class="info-add-phone">Email address</div>
-                                    <div class="detail-add"><?php echo $user['email'] ?></div>
+                                    <div class="detail-add"><?php echo $params['email'] ?></div>
                                 </div>
                                 <div class="info-email">
                                     <div class="info-add-phone">Phone number</div>
-                                    <div class="detail-add"><?php echo $user['phone'] ?></div>
+                                    <div class="detail-add"><?php echo $params['phone'] ?></div>
                                 </div>
                             </div>
                         </div>
@@ -91,7 +91,7 @@ $year = $birthParts[2] ?? '';
                         <div class="title">Contact info</div>
                         <div class="contact-info">
                             <b>Address</b>
-                            <span><?php echo $user['address'] ?></span>
+                            <span><?php echo $params['address'] ?></span>
                         </div>
                     </div>
                     <div class="contact">
@@ -125,8 +125,8 @@ $year = $birthParts[2] ?? '';
             </div>
             <div class="rightbar">
                 <div class="rightbar-info">
-                    <div class="rightbar-info-name"><?php echo $user['lastname'] . " " . $user['firstname'] ?></div>
-                    <div class="rightbar-info-email">@<?php echo $user['username'] ?></div>
+                    <div class="rightbar-info-name"><?php echo $params['lastname'] . " " . $params['firstname'] ?></div>
+                    <div class="rightbar-info-email">@<?php echo $params['username'] ?></div>
                 </div>
                 <div class="rightbar-account-info">
                     <div class="account-info">ACCOUNT INFORMATION</div>
@@ -214,7 +214,7 @@ $year = $birthParts[2] ?? '';
                                     type="text"
                                     placeholder="your first name"
                                     name="first-name"
-                                    value="<?php echo $user['firstname'] ?>"
+                                    value="<?php echo $params['firstname'] ?>"
                             />
                         </div>
                         <div class="clear"></div>
@@ -229,7 +229,7 @@ $year = $birthParts[2] ?? '';
                                     type="text"
                                     placeholder="your last name"
                                     name="last-name"
-                                    value="<?php echo $user['lastname'] ?>"
+                                    value="<?php echo $params['lastname'] ?>"
                             />
                         </div>
                     </div>
@@ -239,7 +239,7 @@ $year = $birthParts[2] ?? '';
                             <div class="sublabel">Your email address</div>
                         </div>
                         <div class="input-data">
-                            <div class="input-text"><?php echo $user['email'] ?></div>
+                            <div class="input-text"><?php echo $params['email'] ?></div>
                         </div>
                     </div>
                     <div class="rows">
@@ -248,7 +248,7 @@ $year = $birthParts[2] ?? '';
                             <div class="sublabel">Your username</div>
                         </div>
                         <div class="input-data">
-                            <div class="input-text">@<b><?php echo $user['username'] ?></b></div>
+                            <div class="input-text">@<b><?php echo $params['username'] ?></b></div>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -262,7 +262,7 @@ $year = $birthParts[2] ?? '';
                                     type="text"
                                     placeholder="Job title"
                                     name="title"
-                                    value="<?php echo $user['title'] ?>"
+                                    value="<?php echo $params['title'] ?>"
                             />
                         </div>
                         <div class="clear"></div>
@@ -273,7 +273,7 @@ $year = $birthParts[2] ?? '';
                             <div class="sublabel">Profile image</div>
                         </div>
                         <div class="input-data">
-                            <input type="file" name="image" class="input-file" value="<?php echo $image?>"/>
+                            <input type="file" name="image" class="input-file" value="<?php echo $params['image']?>"/>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -334,7 +334,7 @@ $year = $birthParts[2] ?? '';
                                     type="text"
                                     placeholder="Your phone number"
                                     name="phone"
-                                    value="<?php echo $user['phone'] ?>"
+                                    value="<?php echo $params['phone'] ?>"
                             />
                         </div>
                         <div class="clear"></div>
@@ -349,7 +349,7 @@ $year = $birthParts[2] ?? '';
                                             type="text"
                                             placeholder="Current address"
                                             name="address"
-                                    ><?php echo $user['address'] ?></textarea
+                                    ><?php echo $params['address'] ?></textarea
                                     >
                         </div>
                         <div class="clear"></div>

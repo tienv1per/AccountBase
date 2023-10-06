@@ -25,7 +25,7 @@ class Router
         $this->routes['post'][$path] = $callback;
     }
 
-    public function renderView($view, $user=[])
+    public function renderView($view, $params=[])
     {
 //        echo '<pre>';
 //        var_dump($user);

@@ -3,7 +3,7 @@
         <div class="popup-but">
             <div class="popup-test">
                 <i class="fa-solid fa-circle-question"></i>
-                <span><?php echo $errors[0]; ?></span>
+                <span><?php echo $params[0]; ?></span>
             </div>
             <span id="closeErr">&times;</span>
         </div>
@@ -31,6 +31,6 @@
         }
     };
 
-    <?php if(!empty($errors)) {?>
+    <?php if(!empty($params)) {?>
     showModal();
 <?php }?>

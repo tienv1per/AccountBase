@@ -9,13 +9,12 @@ $app->router->get('/', '/home');
 
 $app->router->get('/contact', 'contact');
 
-$app->router->get('/login', 'login');
+$app->router->get('/login', [new UserController(), 'login']);
 $app->router->post('/login', [new UserController(), 'login']);
 
-$app->router->post('/logout', [new UserController(), 'logout']);
+$app->router->get('/logout', [new UserController(), 'logout']);
 
 $app->router->get('/signup', [new UserController(), 'signup']);
-//$app->router->get('/signup', 'signup');
 $app->router->post('/signup', [new UserController(), 'signup']);
 
 $app->router->get('/account', [new UserController(), 'account']);

@@ -13,10 +13,10 @@ class UserController
         $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $salt = "tobiasnguyen";
+        $errors = [];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $errors = [];
+
             $username = $_POST['username'];
             $email = $_POST['email'];
             $password = $_POST['password'];
@@ -55,36 +55,22 @@ class UserController
             }
         }
 
-        return $router->renderView('signup');
+        return $router->renderView('signup', $errors);
     }
 
     public function login(Router $router)
     {
 
         session_start();
-
+        $errors = [];
         if (!isset($_SESSION['user_email'])) {
             $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $errors = [];
+
                 $email = $_POST['email'];
                 $password = $_POST['password'];
-
-                if (isset($_POST['submit'])) {
-                    $secret = getEnvVar('SECRET_CAPTCHA_SERVER');
-                    $response = $_POST['g-recaptcha-response'];
-                    $remoteip = $_SERVER['REMOTE_ADDR'];
-                    $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response&remoteip=$remoteip";
-                    $data = file_get_contents($url);
-                    $row = json_decode($data, true);
-//            if ($row['success'] == "true") {
-//                echo "<script>alert('Wow you are not a robot 😲');</script>";
-//            } else {
-//                echo "<script>alert('Oops you are a robot 😡');</script>";
-//            }
-                }
 
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $errors[] = "Invalid email ''. Please try again.";
@@ -92,7 +78,7 @@ class UserController
                 if (!$password) {
                     $errors[] = 'Mật khẩu không hợp lệ. Vui lòng thử lại.';
                 }
-
+;
                 if (empty($errors)) {
                     $statement = $pdo->prepare("SELECT * FROM user WHERE email = :email");
                     $statement->bindValue(":email", $email);
@@ -116,10 +102,8 @@ class UserController
             }
         } else {
             header("Location: /account");
-//            echo "12345";
-//            exit();
         }
-        return $router->renderView('login');
+        return $router->renderView('login', $errors);
     }
 
     public function update()
@@ -132,19 +116,19 @@ class UserController
         $statement = $pdo->prepare('SELECT * FROM user WHERE id = :id');
         $statement->bindValue(":id", $id);
         $statement->execute();
-        $user = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
 
 
-        $title = $user[0]['title'] ?? null;
-        $address = $user[0]['address'] ?? null;
-        $phone = $user[0]['phone'] ?? null;
-        $dob = $user[0]['dob'] ?? null;
-        $imagePath = $user[0]['image'] ?? null;
-        $firstName = $user[0]['firstname'] ?? null;
-        $lastName = $user[0]['lastname'] ?? null;
+        $title = $user['title'] ?? null;
+        $address = $user['address'] ?? null;
+        $phone = $user['phone'] ?? null;
+        $dob = $user['dob'] ?? null;
+        $imagePath = $user['image'] ?? null;
+        $firstName = $user['firstname'] ?? null;
+        $lastName = $user['lastname'] ?? null;
 
-        if($user[0]['dob']){
-            $dob = $user[0]['dob'];
+        if($user['dob']){
+            $dob = $user['dob'];
             $birthParts = explode("/", $dob);
             $day = $birthParts[0];
             $month = $birthParts[1];
@@ -188,7 +172,7 @@ class UserController
                     $imagePath = 'images/' . randomString(8) . '/' . $_FILES['image']['name'];
                     mkdir(dirname($imagePath));
                 } else {
-                    $imagePath = $user[0]['image'];
+                    $imagePath = $user['image'];
                 }
                 if($imagePath) {
                     move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
@@ -225,21 +209,26 @@ class UserController
     {
         session_start();
 
-        //if(!isset($_SESSION['user_email'])) {
-        //    header("Location: login.php");
-        //}
-        //else {
-        $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        //$id = $_SESSION['user_id'];
-        $statement = $pdo->prepare('SELECT * FROM user WHERE id = 1');
-        //$statement->bindValue(":id", $id);
-        $statement->execute();
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        if(!isset($_SESSION['user_email'])) {
+            header("Location: login.php");
+        }
+        else {
+            $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $id = $_SESSION['user_id'];
+            $statement = $pdo->prepare('SELECT * FROM user WHERE id = :id');
+            $statement->bindValue(":id", $id);
+            $statement->execute();
+            $user = $statement->fetch(PDO::FETCH_ASSOC);
+        }
 
         return $router->renderView('account', $user);
-//}
     }
 
-
+    public function logout()
+    {
+        session_start();
+        session_unset();
+        header("Location: /login");
+    }
 }
