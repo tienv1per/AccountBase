@@ -1,0 +1,15 @@
+{
+    "name": "truer/account-base",
+    "authors": [
+        {
+            "name": "tienv1per",
+            "email": "tienviperds@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "require": {}
+}
