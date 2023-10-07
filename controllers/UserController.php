@@ -51,7 +51,7 @@ class UserController
         return $router->renderView('signup', $errors);
     }
 
-    public function login(Router $router)
+    public function login(Router $router): bool|string
     {
 
         session_start();
@@ -159,7 +159,7 @@ class UserController
         }
     }
 
-    public function account(Router $router)
+    public function account(Router $router): bool|string
     {
         session_start();
 

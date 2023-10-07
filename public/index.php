@@ -5,6 +5,10 @@ use app\controllers\UserController;
 
 $app = new Application(dirname(__DIR__));
 
+$app->router->get('/', function (){
+    return "Hello World";
+});
+
 $app->router->get('/login', [new UserController(), 'login']);
 $app->router->post('/login', [new UserController(), 'login']);
 

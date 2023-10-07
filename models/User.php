@@ -18,7 +18,7 @@ class User
     public string $phone;
     public string $address;
 
-    public function load($user)
+    public function load($user): void
     {
         $this->id = $user['id'] ?? null;
         $this->username = $user['username'] ?? '';
@@ -33,7 +33,7 @@ class User
         $this->address = $user['address'] ?? '';
     }
 
-    public function save()
+    public function save(): void
     {
         $db = Database::$db;
         if($this->id){
