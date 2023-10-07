@@ -78,22 +78,11 @@ class UserController {
 
             $post_data = $router->request->getPostData();
             $post_data['id'] = $user['id'];
-//            $validator = new Validator();
-//            $errors = $validator->validate($post_data);
-//            if(!empty($errors)){
-//                $response["success"] = 0;
-//                $response['message'] = $errors;
-//            }
-
-            if(!$post_data['first_name']){
-                $errors[] = 'FIRST NAME EMPTY';
-                $response['message'] = $errors;
+            $validator = new Validator();
+            $errors = $validator->validate($post_data);
+            if(!empty($errors)){
                 $response["success"] = 0;
-            }
-            if(!$post_data['last_name']){
-                $errors[] = 'LAST NAME EMPTY';
                 $response['message'] = $errors;
-                $response["success"] = 0;
             }
 
             $post_data['dob'] = $post_data['day']."/".$post_data['month']."/".$post_data['year'];

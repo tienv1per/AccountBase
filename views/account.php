@@ -4,6 +4,7 @@ $birthParts = explode("/", $dob);
 $day = $birthParts[0];
 $month = $birthParts[1] ?? '';
 $year = $birthParts[2] ?? '';
+var_dump($_SERVER['PATH_INFO'] === '/account');
 ?>
 <?php include_once 'header.php' ?>
 <body>
@@ -453,7 +454,6 @@ $year = $birthParts[2] ?? '';
                     response = JSON.parse(response);
 
                     $("#result").html(response.message);
-                    console.log(response);
                     if (response["success"]) {
                         location.reload();
                     } else {
