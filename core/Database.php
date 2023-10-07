@@ -5,20 +5,17 @@ namespace app\core;
 use app\models\User;
 use PDO;
 
-class Database
-{
+class Database {
     public \PDO $pdo;
     public static Database $db;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->pdo = new PDO('mysql:host=localhost;port=3306;dbname=Base', 'root', '');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         self::$db = $this;
     }
 
-    public function getAccountById(int $id)
-    {
+    public function getAccountById(int $id) {
         $statement = $this->pdo->prepare("SELECT * FROM User WHERE id = :id");
         $statement->bindValue(":id", $id);
         $statement->execute();
@@ -26,8 +23,7 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getAccountByUsernameOrEmail(string $username, string $email)
-    {
+    public function getAccountByUsernameOrEmail(string $username, string $email): bool|array {
         $statement = $this->pdo->prepare("SELECT * FROM User WHERE username = :username OR email = :email");
         $statement->bindValue(":username", $username);
         $statement->bindValue(":email", $email);
@@ -35,8 +31,7 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function updateAccount(User $user): void
-    {
+    public function updateAccount(User $user): void {
         $statement = $this->pdo->prepare("UPDATE User SET title = :title,
                                             firstname = :firstname,
                                             lastname = :lastname,
@@ -58,16 +53,14 @@ class Database
         $statement->execute();
     }
 
-    public function getAccountByEmail(string $email)
-    {
+    public function getAccountByEmail(string $email) {
         $statement = $this->pdo->prepare("SELECT * FROM User WHERE email = :email");
         $statement->bindValue(":email", $email);
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createAccount(User $user): void
-    {
+    public function createAccount(User $user): void {
         $passwordHash = password_hash($user->password, PASSWORD_DEFAULT);
         $statement = $this->pdo->prepare("INSERT INTO User (username, email, password)
                                 VALUES (:username, :email, :password)");

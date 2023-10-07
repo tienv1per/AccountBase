@@ -24,3 +24,28 @@ function getEnvVar($varName, $defaultValue = null) {
     }
     return $defaultValue;
 }
+
+function setCookies(int $id, string $email): void {
+    session_start();
+    $_SESSION ['id'] = $id;
+    $_SESSION['email'] = $email;
+    setcookie(session_name(), $_COOKIE[session_name()], time() + 24 * 60 * 60 * 7);
+}
+
+function saveImages($image): string {
+    if(!is_dir('images')) {
+        mkdir('images');
+    }
+
+    if($_FILES['image']['name']){
+        $imagePath = 'images/' . randomString(8) . '/' . $_FILES['image']['name'];
+        mkdir(dirname($imagePath));
+    } else {
+        $imagePath = $image;
+    }
+    if($imagePath) {
+        move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
+    }
+
+    return $imagePath;
+}
