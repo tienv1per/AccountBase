@@ -36,7 +36,6 @@ function saveImages($image): string {
     if(!is_dir('images')) {
         mkdir('images');
     }
-
     if($_FILES['image']['name']){
         $imagePath = 'images/' . randomString(8) . '/' . $_FILES['image']['name'];
         mkdir(dirname($imagePath));
