@@ -1,5 +1,3 @@
-<?php
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +29,6 @@
                                 type="text"
                                 name="username"
                                 placeholder="Username của bạn"
-                                required=""
                             />
                         </div>
                     </div>
@@ -42,7 +39,6 @@
                                 type="email"
                                 name="email"
                                 placeholder="Email của bạn"
-                                required=""
                             />
                         </div>
                     </div>

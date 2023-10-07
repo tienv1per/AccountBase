@@ -224,7 +224,7 @@ $year = $birthParts[2] ?? '';
                             <input
                                     type="text"
                                     placeholder="your first name"
-                                    name="first-name"
+                                    name="first_name"
                                     value="<?php echo $params['firstname'] ?>"
                             />
                         </div>
@@ -239,7 +239,7 @@ $year = $birthParts[2] ?? '';
                             <input
                                     type="text"
                                     placeholder="your last name"
-                                    name="last-name"
+                                    name="last_name"
                                     value="<?php echo $params['lastname'] ?>"
                             />
                         </div>

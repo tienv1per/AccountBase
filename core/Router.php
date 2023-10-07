@@ -23,7 +23,7 @@ class Router {
         $this->routes['post'][$path] = $callback;
     }
 
-    public function renderView($view, $params=[]): bool|string {
+    public function renderView($view, $params=[]) {
         ob_start();
         include_once __DIR__."/../views/$view.php";
         return ob_get_clean();
