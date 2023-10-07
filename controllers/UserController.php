@@ -3,19 +3,11 @@
 namespace app\controllers;
 use app\core\Router;
 use app\models\User;
-use PDO;
 
 require_once '../utils/functions.php';
 
-class UserController
-{
-    public function signup(Router $router)
-    {
-        $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $errors = [];
-
+class UserController {
+    public function signup(Router $router) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $userData['username'] = $_POST['username'];
@@ -51,15 +43,9 @@ class UserController
         return $router->renderView('signup', $errors);
     }
 
-    public function login(Router $router): bool|string
-    {
-
+    public function login(Router $router): bool|string {
         session_start();
-        $errors = [];
         if (!isset($_SESSION['user_email'])) {
-            $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $email = $_POST['email'];
@@ -96,8 +82,7 @@ class UserController
         return $router->renderView('login', $errors);
     }
 
-    public function update(Router $router): void
-    {
+    public function update(Router $router): void {
         session_start();
         $id = $_SESSION['user_id'];
 
@@ -159,12 +144,11 @@ class UserController
         }
     }
 
-    public function account(Router $router): bool|string
-    {
+    public function account(Router $router): bool|string {
         session_start();
 
         if(!isset($_SESSION['user_email'])) {
-            header("Location: login.php");
+            header("Location: /login");
         }
         else {
             $id = $_SESSION['user_id'];
@@ -174,8 +158,7 @@ class UserController
         return $router->renderView('account', $user);
     }
 
-    public function logout(): void
-    {
+    public function logout(): void {
         session_start();
         session_unset();
         header("Location: /login");

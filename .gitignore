@@ -1,5 +1,6 @@
 .idea/
 captcha/
 badCode/images/
-/vendor/
+vendor/
 public/images/
+.env

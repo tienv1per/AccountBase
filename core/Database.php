@@ -12,14 +12,14 @@ class Database
 
     public function __construct()
     {
-        $this->pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
+        $this->pdo = new PDO('mysql:host=localhost;port=3306;dbname=Base', 'root', '');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         self::$db = $this;
     }
 
     public function getAccountById(int $id)
     {
-        $statement = $this->pdo->prepare("SELECT * FROM user WHERE id = :id");
+        $statement = $this->pdo->prepare("SELECT * FROM User WHERE id = :id");
         $statement->bindValue(":id", $id);
         $statement->execute();
 
@@ -28,7 +28,7 @@ class Database
 
     public function getAccountByUsernameOrEmail(string $username, string $email)
     {
-        $statement = $this->pdo->prepare("SELECT * FROM user WHERE username = :username OR email = :email");
+        $statement = $this->pdo->prepare("SELECT * FROM User WHERE username = :username OR email = :email");
         $statement->bindValue(":username", $username);
         $statement->bindValue(":email", $email);
         $statement->execute();
@@ -37,7 +37,7 @@ class Database
 
     public function updateAccount(User $user): void
     {
-        $statement = $this->pdo->prepare("UPDATE user SET title = :title,
+        $statement = $this->pdo->prepare("UPDATE User SET title = :title,
                                             firstname = :firstname,
                                             lastname = :lastname,
                                             dob = :dob,
@@ -60,7 +60,7 @@ class Database
 
     public function getAccountByEmail(string $email)
     {
-        $statement = $this->pdo->prepare("SELECT * FROM user WHERE email = :email");
+        $statement = $this->pdo->prepare("SELECT * FROM User WHERE email = :email");
         $statement->bindValue(":email", $email);
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC);
@@ -69,7 +69,7 @@ class Database
     public function createAccount(User $user): void
     {
         $passwordHash = password_hash($user->password, PASSWORD_DEFAULT);
-        $statement = $this->pdo->prepare("INSERT INTO user (username, email, password)
+        $statement = $this->pdo->prepare("INSERT INTO User (username, email, password)
                                 VALUES (:username, :email, :password)");
         $statement->bindValue(":username", $user->username);
         $statement->bindValue(":email", $user->email);

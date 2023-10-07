@@ -4,8 +4,7 @@ namespace app\models;
 
 use app\core\Database;
 
-class User
-{
+class User {
     public ?int $id = null;
     public string $firstName;
     public string $lastName;
@@ -18,8 +17,7 @@ class User
     public string $phone;
     public string $address;
 
-    public function load($user): void
-    {
+    public function load($user): void {
         $this->id = $user['id'] ?? null;
         $this->username = $user['username'] ?? '';
         $this->firstName = $user['firstName'] ?? '';
@@ -33,8 +31,7 @@ class User
         $this->address = $user['address'] ?? '';
     }
 
-    public function save(): void
-    {
+    public function save(): void {
         $db = Database::$db;
         if($this->id){
             $db->updateAccount($this);
