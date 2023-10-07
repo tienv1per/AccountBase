@@ -10,8 +10,13 @@ $year = $birthParts[2] ?? '';
 <div class="container">
     <div class="sidebar">
         <ul>
-            <li><i class="fa-solid fa-user-tie"></i></li>
-            <li>account</li>
+            <li>
+                <?php if (!empty($params['image'])) : ?>
+                    <img src="<?php echo $params['image']; ?>" style="height: 60px; width: 60px; border-radius: 50%; padding-left: 15px" />
+                <?php else : ?>
+                    <i class="fa-regular fa-user" style="font-size: 45px; border-radius: 50%; padding-left: 23px"></i>
+                <?php endif; ?>
+            </li>
             <li class="sidebar-btn">
                 <i class="fa-solid fa-user-tie"></i>
                 <span>Account</span>
@@ -30,8 +35,14 @@ $year = $birthParts[2] ?? '';
                 <i class="fa-solid fa-layer-group"></i>
                 <span>Groups</span>
             </li>
-            <li class="sidebar-btn">Guests</li>
-            <li class="sidebar-btn">Applications</li>
+            <li class="sidebar-btn">
+                <i class="fa-solid fa-square-caret-up"></i>
+                <span>Guests</span>
+            </li>
+            <li class="sidebar-btn">
+                <i class="fa-solid fa-server"></i>
+                <span>Applications</span>
+            </li>
         </ul>
 
         <a class="sidebar-logout sidebar-btn" href="/logout">
@@ -44,7 +55,7 @@ $year = $birthParts[2] ?? '';
             <div class="content-container">
                 <div class="header">
                     <div class="header-left">
-                        <button class="back-btn">
+                        <button class="back-btn" style="height: 30px;">
                             <i class="fa-solid fa-arrow-left"></i>
                         </button>
 
@@ -68,7 +79,7 @@ $year = $birthParts[2] ?? '';
                         <div class="profile-info">
                             <div class="avatar">
                                 <?php if (!empty($params['image'])) : ?>
-                                    <img src="<?php echo $params['image']; ?>" style="height: 120px; width: 120px" />
+                                    <img src="<?php echo $params['image']; ?>" style="height: 120px; width: 120px; border-radius: 50%" />
                                 <?php else : ?>
                                     <i class="fa-regular fa-user"></i>
                                 <?php endif; ?>

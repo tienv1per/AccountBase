@@ -8,13 +8,16 @@ use PDO;
 class Database
 {
     public \PDO $pdo;
+    public static Database $db;
+
     public function __construct()
     {
         $this->pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        self::$db = $this;
     }
 
-    public function getAccount(int $id)
+    public function getAccountById(int $id)
     {
         $statement = $this->pdo->prepare("SELECT * FROM user WHERE id = :id");
         $statement->bindValue(":id", $id);
@@ -23,9 +26,36 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateAccount(User $user)
+    public function getAccountByUsernameOrEmail(string $username, string $email)
     {
-        
+        $statement = $this->pdo->prepare("SELECT * FROM user WHERE username = :username OR email = :email");
+        $statement->bindValue(":username", $username);
+        $statement->bindValue(":email", $email);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateAccount(User $user): void
+    {
+        $statement = $this->pdo->prepare("UPDATE user SET title = :title,
+                                            firstname = :firstname,
+                                            lastname = :lastname,
+                                            dob = :dob,
+                                            image = :image,
+                                            phone = :phone,
+                                            address = :address
+                                            WHERE id = :id");
+
+        $statement->bindValue(":id", $user->id);
+        $statement->bindValue(":title", $user->title);
+        $statement->bindValue(":firstname", $user->firstName);
+        $statement->bindValue(":lastname", $user->lastName);
+        $statement->bindValue(":dob", $user->dob);
+        $statement->bindValue(":image", $user->image);
+        $statement->bindValue(":phone", $user->phone);
+        $statement->bindValue(":address", $user->address);
+
+        $statement->execute();
     }
 
     public function getAccountByEmail(string $email)
@@ -36,8 +66,9 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createAccount(User $user, string $passwordHash)
+    public function createAccount(User $user): void
     {
+        $passwordHash = password_hash($user->password, PASSWORD_DEFAULT);
         $statement = $this->pdo->prepare("INSERT INTO user (username, email, password)
                                 VALUES (:username, :email, :password)");
         $statement->bindValue(":username", $user->username);

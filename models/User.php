@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\core\Database;
+
 class User
 {
     public ?int $id = null;
@@ -18,14 +20,26 @@ class User
 
     public function load($user)
     {
-        $this->id = $user['id']  ?? null;
-        $this->username = $user['username'];
-        $this->firstName = $user['firstName'] ?? null;
-        $this->lastName = $user['lastName'] ?? null;
-        $this->email = $user['email'];
-        $this->image = $user['image'] ?? null;
-        $this->dob = $user['dob'] ?? null;
-        $this->phone = $user['phone'] ?? null;
-        $this->address = $user['address'] ?? null;
+        $this->id = $user['id'] ?? null;
+        $this->username = $user['username'] ?? '';
+        $this->firstName = $user['firstName'] ?? '';
+        $this->lastName = $user['lastName'] ?? '';
+        $this->email = $user['email'] ?? '';
+        $this->title = $user['title'] ?? '';
+        $this->password = $user['password'] ?? '';
+        $this->image = $user['image'] ?? '';
+        $this->dob = $user['dob'] ?? '';
+        $this->phone = $user['phone'] ?? '';
+        $this->address = $user['address'] ?? '';
+    }
+
+    public function save()
+    {
+        $db = Database::$db;
+        if($this->id){
+            $db->updateAccount($this);
+        } else {
+            $db->createAccount($this);
+        }
     }
 }

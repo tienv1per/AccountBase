@@ -5,10 +5,6 @@ use app\controllers\UserController;
 
 $app = new Application(dirname(__DIR__));
 
-$app->router->get('/', '/home');
-
-$app->router->get('/contact', 'contact');
-
 $app->router->get('/login', [new UserController(), 'login']);
 $app->router->post('/login', [new UserController(), 'login']);
 

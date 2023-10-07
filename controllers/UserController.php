@@ -1,8 +1,8 @@
 <?php
 
 namespace app\controllers;
-use app\core\Database;
 use app\core\Router;
+use app\models\User;
 use PDO;
 
 require_once '../utils/functions.php';
@@ -18,38 +18,30 @@ class UserController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $username = $_POST['username'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+            $userData['username'] = $_POST['username'];
+            $userData['email'] = $_POST['email'];
+            $userData['password'] = $_POST['password'];
 
-            if (!$username) {
+            if (!$userData['username']) {
                 $errors[] = 'Username empty. Please enter your username';
             }
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($userData['email'], FILTER_VALIDATE_EMAIL)) {
                 $errors[] = "Invalid email ''. Please try again.";
             }
 
-            if (!$password) {
+            if (!$userData['password']) {
                 $errors[] = 'Password empty. Please enter your password';
             }
 
             if (empty($errors)) {
-                $statement = $pdo->prepare("SELECT * FROM user WHERE username = :username OR email = :email");
-                $statement->bindValue(":username", $username);
-                $statement->bindValue(":email", $email);
-                $statement->execute();
-                $existUser = $statement->fetchAll(PDO::FETCH_ASSOC);
+                $user = new User();
+                $user->load($userData);
+                $existUser = $router->database->getAccountByUsernameOrEmail($userData['username'], $userData['email']);
 
                 if ($existUser) {
                     $errors[] = "Username or password has already exist.";
                 } else {
-                    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-                    $statementAdd = $pdo->prepare("INSERT INTO user (username, email, password)
-                                VALUES (:username, :email, :password)");
-                    $statementAdd->bindValue(":username", $username);
-                    $statementAdd->bindValue(":email", $email);
-                    $statementAdd->bindValue(":password", $passwordHash);
-                    $statementAdd->execute();
+                    $user->save();
                     header("Location: /login");
                     exit;
                 }
@@ -104,34 +96,12 @@ class UserController
         return $router->renderView('login', $errors);
     }
 
-    public function update(Router $router)
+    public function update(Router $router): void
     {
         session_start();
-
-        $pdo = new PDO('mysql:host=localhost;port=3306;dbname=base', 'root', '');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $id = $_SESSION['user_id'];
-        $statement = $pdo->prepare('SELECT * FROM user WHERE id = :id');
-        $statement->bindValue(":id", $id);
-        $statement->execute();
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
 
-
-        $title = $user['title'] ?? null;
-        $address = $user['address'] ?? null;
-        $phone = $user['phone'] ?? null;
-        $dob = $user['dob'] ?? null;
-        $imagePath = $user['image'] ?? null;
-        $firstName = $user['firstname'] ?? null;
-        $lastName = $user['lastname'] ?? null;
-
-        if($user['dob']){
-            $dob = $user['dob'];
-            $birthParts = explode("/", $dob);
-            $day = $birthParts[0];
-            $month = $birthParts[1];
-            $year = $birthParts[2];
-        }
+        $user = $router->database->getAccountById($id);
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $response = [
@@ -139,27 +109,28 @@ class UserController
                 "message" => ""
             ];
 
-            $firstName = $_POST['first-name'];
-            $lastName = $_POST['last-name'];
-            $title = $_POST['title'];
-            $address = $_POST['address'];
-            $phone = $_POST['phone'];
-            $day = $_POST['day'];
-            $month = $_POST['month'];
-            $year = $_POST['year'];
+            $userData['id'] = $user['id'];
+            $userData['firstName'] = $_POST['first-name'];
+            $userData['lastName'] = $_POST['last-name'];
+            $userData['title'] = $_POST['title'];
+            $userData['address'] = $_POST['address'];
+            $userData['phone'] = $_POST['phone'];
+            $userData['day'] = $_POST['day'];
+            $userData['month'] = $_POST['month'];
+            $userData['year'] = $_POST['year'];
 
-            if(!$firstName){
+            if(!$userData['firstName']){
                 $errors[] = 'FIRST NAME EMPTY';
                 $response["success"] = 0;
                 $response["message"] = "FIRST NAME EMPTY";
             }
-            if(!$lastName){
+            if(!$userData['lastName']){
                 $errors[] = 'LAST NAME EMPTY';
                 $response["success"] = 0;
                 $response["message"] = "LAST NAME EMPTY";
             }
 
-            $dob = $day."/".$month."/".$year;
+            $userData['dob'] = $userData['day']."/".$userData['month']."/".$userData['year'];
 
             if(empty($errors)){
                 if(!is_dir('images')) {
@@ -176,27 +147,13 @@ class UserController
                     move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
                 }
 
-
                 $response["success"] = 1;
-                $statement = $pdo->prepare("UPDATE user SET title = :title,
-                                            firstname = :firstname,
-                                            lastname = :lastname,
-                                            dob = :dob,
-                                            image = :image,
-                                            phone = :phone,
-                                            address = :address
-                                            WHERE id = :id");
 
-                $statement->bindValue(":id", $id);
-                $statement->bindValue(":title", $title);
-                $statement->bindValue(":firstname", $firstName);
-                $statement->bindValue(":lastname", $lastName);
-                $statement->bindValue(":dob", $dob);
-                $statement->bindValue(":image", $imagePath);
-                $statement->bindValue(":phone", $phone);
-                $statement->bindValue(":address", $address);
+                $userData['image'] = $imagePath;
 
-                $statement->execute();
+                $userUpdate = new User();
+                $userUpdate->load($userData);
+                $userUpdate->save();
             }
             echo json_encode($response);
         }
@@ -211,7 +168,7 @@ class UserController
         }
         else {
             $id = $_SESSION['user_id'];
-            $user = $router->database->getAccount($id);
+            $user = $router->database->getAccountById($id);
         }
 
         return $router->renderView('account', $user);
