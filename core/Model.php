@@ -9,8 +9,8 @@ class Model
     public static $database; // connection
     public static $db; // name database
     public static $fields;
-    public static function getDb()
-    {
+    public static $fieldCreate;
+    public static function getDb() {
         if(!self::$database) {
             self::$database = new Database();
         }
@@ -38,10 +38,22 @@ class Model
         return $model;
     }
 
-    public static function getByEmail(string $email)
-    {
+    public static function getByEmail(string $email) {
         $db = static::$db;
         $statement = self::getDb()->pdo->prepare("SELECT * FROM {$db} WHERE email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
+
+        $dataReturn = $statement->fetch(PDO::FETCH_ASSOC);
+        $model = new static(); // luu constructor cua class dang goi ham
+        $model->load($dataReturn);
+        return $model;
+    }
+
+    public static function getByUsernameOrEmail(string $username, string $email){
+        $db = static::$db;
+        $statement = self::getDb()->pdo->prepare("SELECT * FROM {$db} WHERE username = :username OR email = :email");
+        $statement->bindValue(":username", $username);
         $statement->bindValue(":email", $email);
         $statement->execute();
 
@@ -69,6 +81,36 @@ class Model
             }
         }
         $statement->bindValue(":id", $this->id);
+        $statement->execute();
+    }
+
+    public function createData(): void {
+        $db = static::$db;
+        $fieldsCreate = static::$fieldCreate;
+        $passwordHash = password_hash($this->password, PASSWORD_DEFAULT);
+        $query = "INSERT INTO {$db} (";
+        foreach ($fieldsCreate as $field){
+            $query .= "{$field}, ";
+            //$query .= "{$field} = :{$field}, ";
+        }
+
+        $query = rtrim($query, ", ");
+        $query .= ") VALUES (";
+        foreach ($fieldsCreate as $field){
+            $query .= ":{$field}, ";
+        }
+        $query = rtrim($query, ", ");
+        $query .= ")";
+        $statement = self::getDb()->pdo->prepare($query);
+        foreach ($fieldsCreate as $field){
+            if(property_exists($this, $field)){
+                if($field === "password"){
+                    $statement->bindValue(":password", $passwordHash);
+                } else {
+                    $statement->bindValue(":{$field}", $this->$field);
+                }
+            }
+        }
         $statement->execute();
     }
 }

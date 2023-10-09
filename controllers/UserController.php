@@ -21,12 +21,12 @@ class UserController {
             if (empty($errors)) {
                 $user = new User();
                 $user->load($post_data);
-                $existUser = $router->database->getAccountByUsernameOrEmail($post_data['username'], $post_data['email']);
+                $existUser = User::getByUsernameOrEmail($post_data['username'], $post_data['email']);
 
-                if ($existUser) {
-                    $errors[] = "Username or password has already exist.";
+                if ($existUser->id) {
+                    $errors[] = "Username or email has already exist.";
                 } else {
-                    $user->save();
+                    $user->createData();
                     header("Location: /login");
                     exit;
                 }
@@ -34,7 +34,7 @@ class UserController {
         }
 
         return $router->renderView('signup', $errors);
-    }688888616
+    }
 
     public function login(Router $router) {
         session_start();
