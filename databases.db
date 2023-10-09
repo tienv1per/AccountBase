@@ -1,9 +1,8 @@
-create DATABASE Base;
-use Base;
+create DATABASE TrueP;
+use TrueP;
 create table if not exists User(
 	id int primary key auto_increment,
-    firstname varchar(255),
-    lastname varchar(255),
+    full_name varchar(255),
 	username varchar(32),
 	password varchar(255),
 	email varchar(255),

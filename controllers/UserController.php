@@ -14,6 +14,10 @@ class UserController {
             $validator = new Validator();
             $errors = $validator->validate($post_data);
 
+            if(!preg_match('/^[a-zA-Z0-9_]+$/', $post_data['username'])){
+                $errors[] = "Username must not have space.";
+            }
+
             if (empty($errors)) {
                 $user = new User();
                 $user->load($post_data);
@@ -78,6 +82,7 @@ class UserController {
 
             $post_data = $router->request->getPostData();
             $post_data['id'] = $user['id'];
+
             $validator = new Validator();
             $errors = $validator->validate($post_data);
             if(!empty($errors)){
@@ -86,6 +91,7 @@ class UserController {
             }
 
             $post_data['dob'] = $post_data['day']."/".$post_data['month']."/".$post_data['year'];
+            $post_data['full_name'] = $post_data['first_name']." ".$post_data['last_name'];
 
             if(empty($errors)){
                 $imagePath = saveImages($user['image']);

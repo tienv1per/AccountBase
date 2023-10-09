@@ -1,9 +1,14 @@
 <?php
 $dob = $params['dob'] ?? '';
-$birthParts = explode("/", $dob);
-$day = $birthParts[0];
-$month = $birthParts[1] ?? '';
-$year = $birthParts[2] ?? '';
+$birth_parts = explode("/", $dob);
+$day = $birth_parts[0];
+$month = $birth_parts[1] ?? '';
+$year = $birth_parts[2] ?? '';
+
+$name = $params['full_name'] ?? '';
+$name_parts = explode(' ', $name);
+$first_name = $name_parts[0];
+$last_name = implode(' ', array_slice($name_parts, 1));
 ?>
 <?php include_once 'header.php' ?>
 <body>
@@ -61,7 +66,7 @@ $year = $birthParts[2] ?? '';
 
                         <div class="account">
                             <span class="account-acc">ACCOUNT</span>
-                            <div class="account-username"><?php echo $params['lastname'] . " " . $params['firstname'] ?>
+                            <div class="account-username"><?php echo $name ?>
                                 · <?php echo $params['title'] ?></div>
                         </div>
                     </div>
@@ -85,7 +90,7 @@ $year = $birthParts[2] ?? '';
                                 <?php endif; ?>
                             </div>
                             <div class="info">
-                                <div class="info-name"><?php echo $params['lastname'] . " " . $params['firstname'] ?></div>
+                                <div class="info-name"><?php echo $name ?></div>
                                 <div class="info-title"><?php echo $params['title'] ?></div>
                                 <div class="info-email">
                                     <div class="info-add-phone">Email address</div>
@@ -136,7 +141,7 @@ $year = $birthParts[2] ?? '';
             </div>
             <div class="rightbar">
                 <div class="rightbar-info">
-                    <div class="rightbar-info-name"><?php echo $params['lastname'] . " " . $params['firstname'] ?></div>
+                    <div class="rightbar-info-name"><?php echo $name ?></div>
                     <div class="rightbar-info-email">@<?php echo $params['username'] ?></div>
                 </div>
                 <div class="rightbar-account-info">
@@ -225,7 +230,7 @@ $year = $birthParts[2] ?? '';
                                     type="text"
                                     placeholder="your first name"
                                     name="first_name"
-                                    value="<?php echo $params['firstname'] ?>"
+                                    value="<?php echo $first_name ?>"
                             />
                         </div>
                         <div class="clear"></div>
@@ -240,7 +245,7 @@ $year = $birthParts[2] ?? '';
                                     type="text"
                                     placeholder="your last name"
                                     name="last_name"
-                                    value="<?php echo $params['lastname'] ?>"
+                                    value="<?php echo $last_name ?>"
                             />
                         </div>
                     </div>

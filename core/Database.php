@@ -10,7 +10,7 @@ class Database {
     public static Database $db;
 
     public function __construct() {
-        $this->pdo = new PDO('mysql:host=localhost;port=3306;dbname=Base', 'root', '');
+        $this->pdo = new PDO('mysql:host=localhost;port=3306;dbname=TrueP', 'root', '');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         self::$db = $this;
     }
@@ -33,8 +33,7 @@ class Database {
 
     public function updateAccount(User $user): void {
         $statement = $this->pdo->prepare("UPDATE User SET title = :title,
-                                            firstname = :firstname,
-                                            lastname = :lastname,
+                                            full_name = :full_name,
                                             dob = :dob,
                                             image = :image,
                                             phone = :phone,
@@ -43,8 +42,7 @@ class Database {
 
         $statement->bindValue(":id", $user->id);
         $statement->bindValue(":title", $user->title);
-        $statement->bindValue(":firstname", $user->firstName);
-        $statement->bindValue(":lastname", $user->lastName);
+        $statement->bindValue(":full_name", $user->full_name);
         $statement->bindValue(":dob", $user->dob);
         $statement->bindValue(":image", $user->image);
         $statement->bindValue(":phone", $user->phone);

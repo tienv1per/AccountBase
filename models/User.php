@@ -6,8 +6,7 @@ use app\core\Database;
 
 class User {
     public ?int $id = null;
-    public string $firstName;
-    public string $lastName;
+    public string $full_name;
     public string $title;
     public string $username;
     public string $password;
@@ -20,8 +19,7 @@ class User {
     public function load($user): void {
         $this->id = $user['id'] ?? null;
         $this->username = $user['username'] ?? '';
-        $this->firstName = $user['first_name'] ?? '';
-        $this->lastName = $user['last_name'] ?? '';
+        $this->full_name = $user['full_name'] ?? '';
         $this->email = $user['email'] ?? '';
         $this->title = $user['title'] ?? '';
         $this->password = $user['password'] ?? '';

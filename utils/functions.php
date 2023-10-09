@@ -32,7 +32,7 @@ function setCookies(int $id, string $email): void {
     setcookie(session_name(), $_COOKIE[session_name()], time() + 24 * 60 * 60 * 7);
 }
 
-function saveImages($image): string {
+function saveImages($image) {
     if(!is_dir('images')) {
         mkdir('images');
     }
