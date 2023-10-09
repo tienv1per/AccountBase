@@ -1,11 +1,11 @@
 <?php
-$dob = $params['dob'] ?? '';
+$dob = $params->dob ?? '';
 $birth_parts = explode("/", $dob);
 $day = $birth_parts[0];
 $month = $birth_parts[1] ?? '';
 $year = $birth_parts[2] ?? '';
 
-$name = $params['full_name'] ?? '';
+$name = $params->full_name ?? '';
 $name_parts = explode(' ', $name);
 $first_name = $name_parts[0];
 $last_name = implode(' ', array_slice($name_parts, 1));
@@ -21,8 +21,8 @@ $last_name = implode(' ', array_slice($name_parts, 1));
     <div class="sidebar">
         <ul>
             <li>
-                <?php if (!empty($params['image'])) : ?>
-                    <img src="<?php echo $params['image']; ?>" style="height: 60px; width: 60px; border-radius: 50%; padding-left: 15px" />
+                <?php if (!empty($params->image)) : ?>
+                    <img src="<?php echo $params->image; ?>" style="height: 60px; width: 60px; border-radius: 50%; padding-left: 15px" />
                 <?php else : ?>
                     <i class="fa-regular fa-user" style="font-size: 45px; border-radius: 50%; padding-left: 23px"></i>
                 <?php endif; ?>
@@ -72,7 +72,7 @@ $last_name = implode(' ', array_slice($name_parts, 1));
                         <div class="account">
                             <span class="account-acc">ACCOUNT</span>
                             <div class="account-username"><?php echo $name ?>
-                                · <?php echo $params['title'] ?></div>
+                                · <?php echo $params->title ?></div>
                         </div>
                     </div>
                     <div class="header-right">
@@ -88,22 +88,22 @@ $last_name = implode(' ', array_slice($name_parts, 1));
                     <div class="profile">
                         <div class="profile-info">
                             <div class="avatar">
-                                <?php if (!empty($params['image'])) : ?>
-                                    <img src="<?php echo $params['image']; ?>" style="height: 120px; width: 120px; border-radius: 50%" />
+                                <?php if (!empty($params->image)) : ?>
+                                    <img src="<?php echo $params->image; ?>" style="height: 120px; width: 120px; border-radius: 50%" />
                                 <?php else : ?>
                                     <i class="fa-regular fa-user"></i>
                                 <?php endif; ?>
                             </div>
                             <div class="info">
                                 <div class="info-name"><?php echo $name ?></div>
-                                <div class="info-title"><?php echo $params['title'] ?></div>
+                                <div class="info-title"><?php echo $params->title ?></div>
                                 <div class="info-email">
                                     <div class="info-add-phone">Email address</div>
-                                    <div class="detail-add"><?php echo $params['email'] ?></div>
+                                    <div class="detail-add"><?php echo $params->email ?></div>
                                 </div>
                                 <div class="info-email">
                                     <div class="info-add-phone">Phone number</div>
-                                    <div class="detail-add"><?php echo $params['phone'] ?></div>
+                                    <div class="detail-add"><?php echo $params->phone ?></div>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@ $last_name = implode(' ', array_slice($name_parts, 1));
                         <div class="title">Contact info</div>
                         <div class="contact-info">
                             <b>Address</b>
-                            <span><?php echo $params['address'] ?></span>
+                            <span><?php echo $params->address ?></span>
                         </div>
                     </div>
                     <div class="contact">
@@ -147,7 +147,7 @@ $last_name = implode(' ', array_slice($name_parts, 1));
             <div class="rightbar">
                 <div class="rightbar-info">
                     <div class="rightbar-info-name"><?php echo $name ?></div>
-                    <div class="rightbar-info-email">@<?php echo $params['username'] ?></div>
+                    <div class="rightbar-info-email">@<?php echo $params->username ?></div>
                 </div>
                 <div class="rightbar-account-info">
                     <div class="account-info">ACCOUNT INFORMATION</div>
@@ -260,7 +260,7 @@ $last_name = implode(' ', array_slice($name_parts, 1));
                             <div class="sublabel">Your email address</div>
                         </div>
                         <div class="input-data">
-                            <div class="input-text"><?php echo $params['email'] ?></div>
+                            <div class="input-text"><?php echo $params->email ?></div>
                         </div>
                     </div>
                     <div class="rows">
@@ -269,7 +269,7 @@ $last_name = implode(' ', array_slice($name_parts, 1));
                             <div class="sublabel">Your username</div>
                         </div>
                         <div class="input-data">
-                            <div class="input-text">@<b><?php echo $params['username'] ?></b></div>
+                            <div class="input-text">@<b><?php echo $params->username ?></b></div>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -283,7 +283,7 @@ $last_name = implode(' ', array_slice($name_parts, 1));
                                     type="text"
                                     placeholder="Job title"
                                     name="title"
-                                    value="<?php echo $params['title'] ?>"
+                                    value="<?php echo $params->title ?>"
                             />
                         </div>
                         <div class="clear"></div>
@@ -294,7 +294,7 @@ $last_name = implode(' ', array_slice($name_parts, 1));
                             <div class="sublabel">Profile image</div>
                         </div>
                         <div class="input-data">
-                            <input type="file" name="image" class="input-file" value="<?php echo $params['image']?>"/>
+                            <input type="file" name="image" class="input-file" value="<?php echo $params->image?>"/>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -355,7 +355,7 @@ $last_name = implode(' ', array_slice($name_parts, 1));
                                     type="text"
                                     placeholder="Your phone number"
                                     name="phone"
-                                    value="<?php echo $params['phone'] ?>"
+                                    value="<?php echo $params->phone ?>"
                             />
                         </div>
                         <div class="clear"></div>
@@ -370,7 +370,7 @@ $last_name = implode(' ', array_slice($name_parts, 1));
                                             type="text"
                                             placeholder="Current address"
                                             name="address"
-                                    ><?php echo $params['address'] ?></textarea
+                                    ><?php echo $params->address ?></textarea
                                     >
                         </div>
                         <div class="clear"></div>

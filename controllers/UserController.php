@@ -124,7 +124,7 @@ class UserController {
         }
         else {
             $id = $_SESSION['id'];
-            $user = $router->database->getAccountById($id);
+            $user = User::getById($id);
         }
 
         return $router->renderView('account', $user);

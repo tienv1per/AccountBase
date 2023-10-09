@@ -2,7 +2,6 @@
 
 namespace app\core;
 
-use app\models\User;
 use PDO;
 
 class Model
