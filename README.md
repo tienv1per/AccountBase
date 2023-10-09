@@ -38,4 +38,13 @@ If you have any problems, post it in Issue part of the repository.
 ## Authors and acknowledgement
 - nguyen.hung.tien
 
+## Resource
+### PHP
+- [FreeCodeCamp](https://www.youtube.com/watch?v=6ERdu4k62wI) (highly recommend)
+- [Traversy Media](https://www.youtube.com/watch?v=2eebptXfEvw&t=18581s&ab_channel=TraversyMedia)
+### HTML CSS
+- [HTML](https://www.youtube.com/watch?v=UB1O30fR-EE&list=PLillGF-RfqbZTASqIqdvm1R5mLrQq79CU&index=1)
+- [CSS](https://www.youtube.com/watch?v=yfoY53QXEnI&list=PLillGF-RfqbZTASqIqdvm1R5mLrQq79CU&index=2)
+### Jquery Javascript
+- Follow this [playlist](https://www.youtube.com/watch?v=3nrLc_JOF7k&list=PLxUL3xY11f0ob5y4Vm-WiP2QPGwP80E5-)
 ## License
