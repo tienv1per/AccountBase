@@ -1,14 +1,18 @@
-create DATABASE TrueP;
-use TrueP;
+create DATABASE AccountBase;
+use AccountBase;
 create table if not exists User(
 	id int primary key auto_increment,
     full_name varchar(255),
-	username varchar(32),
+	username varchar(64),
 	password varchar(255),
-	email varchar(255),
+	email varchar(64),
 	title varchar(255),
 	image varchar(2048),
 	dob varchar(255),
 	phone varchar(20),
 	address varchar(2048)
 );
+
+CREATE INDEX idx_username ON User(username);
+
+CREATE INDEX idx_email ON User(email);
