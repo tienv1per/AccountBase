@@ -48,11 +48,12 @@ class UserController {
                 $validator = new Validator();
                 $errors = $validator->validate($post_data);
                 if (empty($errors)) {
-                    $user = $router->database->getAccountByEmail($email);
+                    //$user = $router->database->getAccountByEmail($email);
+                    $user = User::getByEmail($email);
 
                     if ($user) {
-                        if (password_verify($password, $user['password'])) {
-                            setCookies($user['id'], $user['email']);
+                        if (password_verify($password, $user->password)) {
+                            setCookies($user->id, $user->email);
                             header("Location: /account");
                         } else {
                             $errors[] = "Email or password not correct";
@@ -72,7 +73,8 @@ class UserController {
         session_start();
         $id = $_SESSION['id'];
 
-        $user = $router->database->getAccountById($id);
+        //$user = $router->database->getAccountById($id);
+        $user = User::getById($id);
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $response = [
@@ -81,7 +83,7 @@ class UserController {
             ];
 
             $post_data = $router->request->getPostData();
-            $post_data['id'] = $user['id'];
+//            $post_data['id'] = $user['id'];
 
             $validator = new Validator();
             $errors = $validator->validate($post_data);
@@ -90,19 +92,25 @@ class UserController {
                 $response['message'] = $errors;
             }
 
-            $post_data['dob'] = $post_data['day']."/".$post_data['month']."/".$post_data['year'];
-            $post_data['full_name'] = $post_data['first_name']." ".$post_data['last_name'];
+            foreach ($post_data as $key => $value){
+                if(property_exists($user, $key)){
+                    $user->$key = $value;
+                }
+            }
+
+            $user->dob = $post_data['day']."/".$post_data['month']."/".$post_data['year'];
+            $user->full_name = $post_data['first_name']." ".$post_data['last_name'];
 
             if(empty($errors)){
-                $imagePath = saveImages($user['image']);
+                $imagePath = saveImages($user->image);
 
                 $response["success"] = 1;
 
-                $post_data['image'] = $imagePath;
+                $user->image = $imagePath;
 
-                $userUpdate = new User();
-                $userUpdate->load($post_data);
-                $userUpdate->save();
+//                $userUpdate = new User();
+//                $userUpdate->load($post_data);
+                $user->updateData();
             }
             echo json_encode($response);
         }

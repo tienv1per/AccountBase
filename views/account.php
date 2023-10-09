@@ -9,6 +9,11 @@ $name = $params['full_name'] ?? '';
 $name_parts = explode(' ', $name);
 $first_name = $name_parts[0];
 $last_name = implode(' ', array_slice($name_parts, 1));
+
+//echo '<pre>';
+//var_dump($params);
+//echo '</pre>';
+
 ?>
 <?php include_once 'header.php' ?>
 <body>
