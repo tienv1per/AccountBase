@@ -24,24 +24,7 @@ class Model
             }
             $this->{$key} = $value;
         }
-//        $this->id = $user['id'] ?? null;
-//        $this->username = $user['username'] ?? '';
-//        $this->full_name = $user['full_name'] ?? '';
-//        $this->email = $user['email'] ?? '';
-//        $this->title = $user['title'] ?? '';
-//        $this->password = $user['password'] ?? '';
-//        $this->image = $user['image'] ?? '';
-//        $this->dob = $user['dob'] ?? '';
-//        $this->phone = $user['phone'] ?? '';
-//        $this->address = $user['address'] ?? '';
     }
-
-//    public function save()
-//    {
-//        if($this->id){
-//
-//        }
-//    }
 
     public static function getById(int $id) {
         $db = static::$db;
@@ -49,7 +32,6 @@ class Model
         $statement->bindValue(":id", $id);
         $statement->execute();
 
-        //return $statement->fetch(PDO::FETCH_ASSOC);
         $dataReturn = $statement->fetch(PDO::FETCH_ASSOC);
         $model = new static(); // luu constructor cua class dang goi ham
         $model->load($dataReturn);
@@ -87,15 +69,6 @@ class Model
             }
         }
         $statement->bindValue(":id", $this->id);
-
-//        $statement->bindValue(":id", $user->id);
-//        $statement->bindValue(":title", $user->title);
-//        $statement->bindValue(":full_name", $user->full_name);
-//        $statement->bindValue(":dob", $user->dob);
-//        $statement->bindValue(":image", $user->image);
-//        $statement->bindValue(":phone", $user->phone);
-//        $statement->bindValue(":address", $user->address);
-
         $statement->execute();
     }
 }

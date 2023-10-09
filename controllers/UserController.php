@@ -34,7 +34,7 @@ class UserController {
         }
 
         return $router->renderView('signup', $errors);
-    }
+    }688888616
 
     public function login(Router $router) {
         session_start();
@@ -48,7 +48,6 @@ class UserController {
                 $validator = new Validator();
                 $errors = $validator->validate($post_data);
                 if (empty($errors)) {
-                    //$user = $router->database->getAccountByEmail($email);
                     $user = User::getByEmail($email);
 
                     if ($user) {
@@ -72,8 +71,6 @@ class UserController {
     public function update(Router $router): void {
         session_start();
         $id = $_SESSION['id'];
-
-        //$user = $router->database->getAccountById($id);
         $user = User::getById($id);
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -83,7 +80,6 @@ class UserController {
             ];
 
             $post_data = $router->request->getPostData();
-//            $post_data['id'] = $user['id'];
 
             $validator = new Validator();
             $errors = $validator->validate($post_data);
@@ -108,8 +104,6 @@ class UserController {
 
                 $user->image = $imagePath;
 
-//                $userUpdate = new User();
-//                $userUpdate->load($post_data);
                 $user->updateData();
             }
             echo json_encode($response);
