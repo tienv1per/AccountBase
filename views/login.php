@@ -45,7 +45,7 @@
                         </div>
 
                     </div>
-                    <div class="g-recaptcha" data-sitekey="6Ld0oXUoAAAAADMHAjYB_d5o5Ly9GqDhTMtKWnJs"></div>
+<!--                    <div class="g-recaptcha" data-sitekey="6Ld0oXUoAAAAADMHAjYB_d5o5Ly9GqDhTMtKWnJs"></div>-->
                 </form>
                 <div class="form-relative">
                     <div class="checkbox">
