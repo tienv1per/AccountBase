@@ -296,7 +296,7 @@ ul, li {
 .modal-content {
 	background-color: #fefefe;
 	margin: auto;
-	width: 35%;
+	width: 650px;
 }
 
 .modal-header {
@@ -337,7 +337,7 @@ ul, li {
 .label {
 	font-weight: 500;
 	font-size: 14px;
-	width: 150px;
+	width: 140px;
 	padding: 0;
 }
 
@@ -357,6 +357,7 @@ ul, li {
 	border-left: 1px solid #d3d3d3;
 	border-bottom: 1px solid #ccc;
 	border-radius: 5px;
+	flex-grow: 1;
 }
 
 .input-data input {
@@ -364,16 +365,16 @@ ul, li {
 	align-items: center;
 	height: 32px;
 	border: none;
-	width: 520px;
+	width: 100%;
 }
 
 .input-data textarea {
 	overflow: hidden;
 	overflow-wrap: break-word;
 	height: 50px;
-	width: 520px;
 	border: none;
 	font-size: 16px;
+	width: 100%;
 }
 
 .clear {
@@ -391,8 +392,8 @@ ul, li {
 	border-radius: 3px;
 	background-color: #eee;
 	height: 32px;
-	width: 520px;
 	padding-left: 3px;
+	flex-grow: 1;
 }
 
 .input-file {
@@ -405,18 +406,19 @@ ul, li {
 	padding-left: 0;
 	display: flex;
 	justify-content: space-between;
+	width: 480px;
 }
 
 .gi {
 	padding-left: 0;
-	width: 173px;
+	width: 130px;
 }
 
 .gi select {
 	display: block;
 	cursor: pointer;
 	padding: 6px 8px;
-	margin-left: -5px;
+	width: 130px;
 	border: none;
 	font-size: 15px;
 	border-radius: 3px;
